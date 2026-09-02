@@ -87,7 +87,7 @@ function App() {
   }, [darkMode]);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/landlord_desk">
       <Routes>
 
         {/* Public Pages */}
