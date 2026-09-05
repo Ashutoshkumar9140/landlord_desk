@@ -6,8 +6,8 @@ function Home({ darkMode }) {
     <div
       className={`h-[calc(100vh-65px)] overflow-hidden transition-colors duration-300 ${
         darkMode
-          ? "bg-slate-950 text-slate-100"
-          : "bg-slate-200 text-slate-900"
+          ? "text-slate-100 bg-slate-950"
+          : "text-slate-900 bg-slate-200"
       }`}
     >
 
@@ -63,8 +63,8 @@ function Home({ darkMode }) {
               to="/about"
               className={`rounded-lg border px-6 py-3 text-sm font-semibold transition ${
                 darkMode
-                  ? "border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700"
-                  : "border-slate-400 bg-slate-300 text-slate-800 hover:bg-slate-400"
+                  ? "bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700"
+                  : "text-slate-800 border-slate-400 hover:bg-slate-400 bg-slate-300"
               }`}
             >
               Learn More

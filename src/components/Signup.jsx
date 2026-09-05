@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function Signup({ darkMode }) {
   const navigate = useNavigate();
-  const { user, signup } = useAuth();
+  const { signup } = useAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,26 +13,22 @@ function Signup({ darkMode }) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (user) {
-      navigate("/dashboard", { replace: true });
-    }
-  }, [user, navigate]);
-
+  // ........................................Handle Signup ........................................
   const handleSubmit = (e) => {
     e.preventDefault();
-
     setError("");
 
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
     const trimmedMobile = mobile.trim();
 
+    // ........................................ Validate Name ........................................
     if (trimmedName.length < 2) {
       setError("Name must contain at least 2 characters.");
       return;
     }
 
+    // ........................................Validate Email ........................................
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailPattern.test(trimmedEmail)) {
@@ -40,24 +36,27 @@ function Signup({ darkMode }) {
       return;
     }
 
+    // ......................................Validate Mobile Number ......................................
     const mobilePattern = /^[6-9]\d{9}$/;
 
     if (!mobilePattern.test(trimmedMobile)) {
       setError(
-        "Mobile number must be exactly 10 digits and start with 6, 7, 8, or 9."
+        "Mobile number must be exactly 10 digits and start with 6, 7, 8, or 9.",
       );
       return;
     }
 
+    // ....................................... Validate Password.......................................
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
     if (!passwordPattern.test(password)) {
       setError(
-        "Password must be at least 8 characters and contain at least one letter and one number."
+        "Password must be at least 8 characters and contain at least one letter and one number.",
       );
       return;
     }
 
+    // ........................................Create New Account........................................
     const result = signup({
       name: trimmedName,
       email: trimmedEmail,
@@ -70,7 +69,8 @@ function Signup({ darkMode }) {
       return;
     }
 
-    navigate("/login");
+    // ........................................Go To Dashboard........................................
+    navigate("/dashboard", { replace: true });
   };
 
   const handleInputFocus = () => {
@@ -100,18 +100,18 @@ function Signup({ darkMode }) {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 top-[65px] z-40 flex items-start justify-center px-4 pb-8 pt-12">
       <div
-        className={`pointer-events-auto relative max-h-[80vh] w-[80vw] max-w-md overflow-y-auto rounded-3xl border p-8 shadow-2xl [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
+        className={`relative max-h-[80vh] w-[80vw] max-w-md overflow-y-auto rounded-3xl border p-8 shadow-2xl pointer-events-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
           darkMode
-            ? "border-slate-700 bg-slate-900"
-            : "border-slate-400 bg-slate-300"
+            ? "bg-slate-900 border-slate-700"
+            : "bg-slate-300 border-slate-400"
         }`}
       >
         <Link
           to="/"
           className={`absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full border text-sm font-medium transition ${
             darkMode
-              ? "border-slate-600 bg-slate-800 text-slate-300 hover:border-red-400 hover:bg-red-500/10 hover:text-red-400"
-              : "border-slate-400 bg-slate-200 text-slate-700 hover:border-red-400 hover:bg-red-500/10 hover:text-red-600"
+              ? "text-slate-300 hover:text-red-400 bg-slate-800 hover:bg-red-500/10 border-slate-600 hover:border-red-400"
+              : "hover:border-red-400 bg-slate-200 text-slate-700 border-slate-400 hover:bg-red-500/10 hover:text-red-600"
           }`}
         >
           ✕
@@ -120,7 +120,7 @@ function Signup({ darkMode }) {
         <form onSubmit={handleSubmit}>
           <div className="pr-12">
             <h1
-              className={`text-3xl font-bold ${
+              className={`font-bold text-3xl ${
                 darkMode ? "text-slate-100" : "text-slate-900"
               }`}
             >
@@ -140,8 +140,8 @@ function Signup({ darkMode }) {
             <div
               className={`mt-6 rounded-lg border px-4 py-3 text-sm ${
                 darkMode
-                  ? "border-red-500/30 bg-red-500/10 text-red-400"
-                  : "border-red-400 bg-red-100 text-red-700"
+                  ? "bg-red-500/10 text-red-400 border-red-500/30"
+                  : "text-red-700 border-red-400 bg-red-100"
               }`}
             >
               {error}
@@ -166,8 +166,8 @@ function Signup({ darkMode }) {
               placeholder="Enter your name"
               className={`w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
                 darkMode
-                  ? "border-slate-700 bg-slate-700 text-slate-100 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
-                  : "border-slate-400 bg-slate-100 text-slate-900 placeholder:text-slate-500 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20"
+                  ? "text-slate-100 focus:border-indigo-500 border-slate-700 focus:ring-2 bg-slate-700 placeholder:text-slate-400 focus:ring-indigo-500/20"
+                  : "bg-slate-100 placeholder:text-slate-500 border-slate-400 focus:ring-2 text-slate-900 focus:border-indigo-600 focus:ring-indigo-600/20"
               }`}
             />
           </div>
@@ -190,8 +190,8 @@ function Signup({ darkMode }) {
               placeholder="Enter your email"
               className={`w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
                 darkMode
-                  ? "border-slate-700 bg-slate-700 text-slate-100 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
-                  : "border-slate-400 bg-slate-100 text-slate-900 placeholder:text-slate-500 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20"
+                  ? "placeholder:text-slate-400 bg-slate-700 focus:ring-2 text-slate-100 border-slate-700 focus:ring-indigo-500/20 focus:border-indigo-500"
+                  : "text-slate-900 border-slate-400 focus:border-indigo-600 bg-slate-100 placeholder:text-slate-500 focus:ring-2 focus:ring-indigo-600/20"
               }`}
             />
           </div>
@@ -216,8 +216,8 @@ function Signup({ darkMode }) {
               placeholder="Enter 10 digit mobile number"
               className={`w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
                 darkMode
-                  ? "border-slate-700 bg-slate-700 text-slate-100 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
-                  : "border-slate-400 bg-slate-100 text-slate-900 placeholder:text-slate-500 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20"
+                  ? "border-slate-700 placeholder:text-slate-400 text-slate-100 bg-slate-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
+                  : "focus:ring-2 bg-slate-100 text-slate-900 border-slate-400 placeholder:text-slate-500 focus:ring-indigo-600/20 focus:border-indigo-600"
               }`}
             />
           </div>
@@ -242,20 +242,18 @@ function Signup({ darkMode }) {
                 placeholder="Create password"
                 className={`w-full rounded-lg border px-4 py-3 pr-16 text-sm outline-none transition ${
                   darkMode
-                    ? "border-slate-700 bg-slate-700 text-slate-100 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20"
-                    : "border-slate-400 bg-slate-100 text-slate-900 placeholder:text-slate-500 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600/20"
+                    ? "bg-slate-700 focus:ring-indigo-500/20 text-slate-100 border-slate-700 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2"
+                    : "border-slate-400 focus:border-indigo-600 text-slate-900 bg-slate-100 focus:ring-2 placeholder:text-slate-500 pr-16 focus:ring-indigo-600/20"
                 }`}
               />
 
               <button
                 type="button"
-                onClick={() =>
-                  setShowPassword((previous) => !previous)
-                }
+                onClick={() => setShowPassword((previous) => !previous)}
                 className={`absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-xs font-semibold transition ${
                   darkMode
-                    ? "text-slate-400 hover:bg-slate-600 hover:text-slate-100"
-                    : "text-slate-600 hover:bg-slate-200 hover:text-slate-900"
+                    ? "hover:text-slate-100 text-slate-400 hover:bg-slate-600"
+                    : "hover:bg-slate-200 text-slate-600 hover:text-slate-900"
                 }`}
               >
                 {showPassword ? "Hide" : "Show"}

@@ -36,12 +36,7 @@ const defaultRooms = [
     rentCycle: "15 → 14",
     deposit: 16000,
     status: "Occupied",
-    facilities: [
-      "Fan",
-      "Bed",
-      "Wi-Fi",
-      "Bathroom",
-    ],
+    facilities: ["Fan", "Bed", "Wi-Fi", "Bathroom"],
     month: "October 2026",
     paidDate: "15 August 2026",
     paidAmount: 8000,
@@ -165,11 +160,7 @@ const defaultRooms = [
     rentCycle: "5 → 4",
     deposit: 15000,
     status: "Occupied",
-    facilities: [
-      "Fan",
-      "Bed",
-      "Cupboard",
-    ],
+    facilities: ["Fan", "Bed", "Cupboard"],
     month: "October 2026",
     paidDate: "5 August 2026",
     paidAmount: 7500,
@@ -307,23 +298,17 @@ const getMonthOptions = () => {
   const today = new Date();
 
   for (let i = 0; i < 6; i += 1) {
-    const date = new Date(
-      today.getFullYear(),
-      today.getMonth() - i,
-      1
-    );
+    const date = new Date(today.getFullYear(), today.getMonth() - i, 1);
 
-    const value = `${date.getFullYear()}-${String(
-      date.getMonth() + 1
-    ).padStart(2, "0")}`;
+    const value = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+      2,
+      "0",
+    )}`;
 
-    const label = date.toLocaleDateString(
-      "en-IN",
-      {
-        month: "long",
-        year: "numeric",
-      }
-    );
+    const label = date.toLocaleDateString("en-IN", {
+      month: "long",
+      year: "numeric",
+    });
 
     options.push({
       value,
@@ -337,9 +322,10 @@ const getMonthOptions = () => {
 const MONTH_OPTIONS = getMonthOptions();
 
 const getMonthValue = (date) => {
-  return `${date.getFullYear()}-${String(
-    date.getMonth() + 1
-  ).padStart(2, "0")}`;
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(
+    2,
+    "0",
+  )}`;
 };
 
 const DEFAULT_FILTERS = {
@@ -350,72 +336,47 @@ const DEFAULT_FILTERS = {
   upcomingDays: "",
 };
 
-function Dashboard({
-  darkMode,
-  setDarkMode,
-}) {
+function Dashboard({ darkMode, setDarkMode }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  const [showSettings, setShowSettings] =
-    useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
-  const [showProfile, setShowProfile] =
-    useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
-  const [profileImage, setProfileImage] =
-    useState("");
+  const [profileImage, setProfileImage] = useState("");
 
-  const [expandedRoom, setExpandedRoom] =
-    useState(null);
+  const [expandedRoom, setExpandedRoom] = useState(null);
 
-  const [searchQuery, setSearchQuery] =
-    useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const [showFilters, setShowFilters] =
-    useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
-  const [showSort, setShowSort] =
-    useState(false);
+  const [showSort, setShowSort] = useState(false);
 
-  const [selectedMonth, setSelectedMonth] =
-    useState(MONTH_OPTIONS[0].value);
+  const [selectedMonth, setSelectedMonth] = useState(MONTH_OPTIONS[0].value);
 
-  const [filters, setFilters] =
-    useState(DEFAULT_FILTERS);
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
-  const [sortBy, setSortBy] =
-    useState("roomAsc");
+  const [sortBy, setSortBy] = useState("roomAsc");
 
   useEffect(() => {
     try {
-      const savedProfile =
-        localStorage.getItem(
-          "landlord_profile"
-        );
+      const savedProfile = localStorage.getItem("landlord_profile");
 
       if (savedProfile) {
-        const profile =
-          JSON.parse(savedProfile);
+        const profile = JSON.parse(savedProfile);
 
-        setProfileImage(
-          profile.image || ""
-        );
+        setProfileImage(profile.image || "");
       }
     } catch (error) {
-      console.error(
-        "Could not load profile:",
-        error
-      );
+      console.error("Could not load profile:", error);
     }
   }, []);
 
   const [rooms, setRooms] = useState(() => {
     try {
-      const savedRooms =
-        localStorage.getItem(
-          STORAGE_KEY
-        );
+      const savedRooms = localStorage.getItem(STORAGE_KEY);
 
       if (savedRooms) {
         return JSON.parse(savedRooms);
@@ -423,10 +384,7 @@ function Dashboard({
 
       return defaultRooms;
     } catch (error) {
-      console.error(
-        "Could not load rooms:",
-        error
-      );
+      console.error("Could not load rooms:", error);
 
       return defaultRooms;
     }
@@ -434,42 +392,27 @@ function Dashboard({
 
   useEffect(() => {
     try {
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(rooms)
-      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(rooms));
     } catch (error) {
-      console.error(
-        "Could not save rooms:",
-        error
-      );
+      console.error("Could not save rooms:", error);
     }
   }, [rooms]);
 
   useEffect(() => {
-    document.body.style.overflow =
-      expandedRoom !== null
-        ? "hidden"
-        : "";
+    document.body.style.overflow = expandedRoom !== null ? "hidden" : "";
 
     return () => {
       document.body.style.overflow = "";
     };
   }, [expandedRoom]);
 
-  /*
-    -----------------------------
-    ROOM MANAGEMENT
-    -----------------------------
-  */
+  // .....................................ROOM MANAGEMENT........................................
 
   const handleAddRoom = () => {
     const usedNumbers = new Set(
       rooms
         .map((room) => Number(room.number))
-        .filter((number) =>
-          Number.isFinite(number)
-        )
+        .filter((number) => Number.isFinite(number)),
     );
 
     let nextNumber = 1;
@@ -480,10 +423,7 @@ function Dashboard({
 
     const newRoom = {
       id: Date.now(),
-      number: String(nextNumber).padStart(
-        2,
-        "0"
-      ),
+      number: String(nextNumber).padStart(2, "0"),
       tenant: "",
       tenants: [],
       gender: "",
@@ -507,32 +447,22 @@ function Dashboard({
       billingHistory: [],
     };
 
-    setRooms((previousRooms) => [
-      ...previousRooms,
-      newRoom,
-    ]);
+    setRooms((previousRooms) => [...previousRooms, newRoom]);
 
     setExpandedRoom(newRoom.id);
   };
 
-  const handleRoomUpdate = (
-    updatedRoom
-  ) => {
+  const handleRoomUpdate = (updatedRoom) => {
     setRooms((previousRooms) =>
       previousRooms.map((room) =>
-        room.id === updatedRoom.id
-          ? updatedRoom
-          : room
-      )
+        room.id === updatedRoom.id ? updatedRoom : room,
+      ),
     );
   };
 
   const handleRoomDelete = (roomId) => {
     setRooms((previousRooms) =>
-      previousRooms.filter(
-        (room) =>
-          room.id !== roomId
-      )
+      previousRooms.filter((room) => room.id !== roomId),
     );
 
     setExpandedRoom(null);
@@ -548,99 +478,48 @@ function Dashboard({
     setShowSettings(true);
   };
 
-  /*
-    -----------------------------
-    MONTH HELPERS
-    -----------------------------
-  */
+  // .....................................MONTH HELPERS........................................
 
-  const getHistoryForMonth = (
-    room,
-    monthValue
-  ) => {
-    const history =
-      Array.isArray(room.billingHistory)
-        ? room.billingHistory
-        : [];
+  const getHistoryForMonth = (room, monthValue) => {
+    const history = Array.isArray(room.billingHistory)
+      ? room.billingHistory
+      : [];
 
-    const match = history.find(
-      (entry) => {
-        if (!entry?.month) {
-          return false;
-        }
-
-        const parsed =
-          new Date(
-            `1 ${entry.month}`
-          );
-
-        if (
-          Number.isNaN(
-            parsed.getTime()
-          )
-        ) {
-          return false;
-        }
-
-        return (
-          getMonthValue(parsed) ===
-          monthValue
-        );
+    const match = history.find((entry) => {
+      if (!entry?.month) {
+        return false;
       }
-    );
+
+      const parsed = new Date(`1 ${entry.month}`);
+
+      if (Number.isNaN(parsed.getTime())) {
+        return false;
+      }
+
+      return getMonthValue(parsed) === monthValue;
+    });
 
     return match || null;
   };
 
-  const getMonthPayment = (
-    room,
-    monthValue
-  ) => {
-    const historyEntry =
-      getHistoryForMonth(
-        room,
-        monthValue
-      );
+  const getMonthPayment = (room, monthValue) => {
+    const historyEntry = getHistoryForMonth(room, monthValue);
 
     if (historyEntry?.rent) {
       return {
-        rent:
-          Number(
-            historyEntry.rent.amountDue
-          ) ||
-          Number(room.rent) ||
-          0,
+        rent: Number(historyEntry.rent.amountDue) || Number(room.rent) || 0,
 
-        paid:
-          Number(
-            historyEntry.rent.paidAmount
-          ) || 0,
+        paid: Number(historyEntry.rent.paidAmount) || 0,
 
-        due:
-          Number(
-            historyEntry.rent.dueAmount
-          ) || 0,
+        due: Number(historyEntry.rent.dueAmount) || 0,
 
-        paidDate:
-          historyEntry.rent
-            .paidDate || "",
+        paidDate: historyEntry.rent.paidDate || "",
 
-        nextPaymentDate:
-          historyEntry.rent
-            .nextPaymentDate || "",
+        nextPaymentDate: historyEntry.rent.nextPaymentDate || "",
       };
     }
 
-    /*
-      No billing record for the selected
-      month means there is no collection
-      or due amount for that month.
-
-      This is important because current
-      room fields belong to the current
-      billing state and must not leak into
-      another month's calculation.
-    */
+    // No billing record means there is no payment for this month.
 
     return {
       rent: Number(room.rent) || 0,
@@ -651,169 +530,79 @@ function Dashboard({
     };
   };
 
-  /*
-    -----------------------------
-    COLLECTION
-    -----------------------------
-  */
+  // .....................................COLLECTION........................................
 
-  const thisMonthCollection =
-    useMemo(() => {
-      return rooms.reduce(
-        (sum, room) => {
-          const payment =
-            getMonthPayment(
-              room,
-              selectedMonth
-            );
+  const thisMonthCollection = useMemo(() => {
+    return rooms.reduce((sum, room) => {
+      const payment = getMonthPayment(room, selectedMonth);
 
-          return (
-            sum +
-            (Number(payment.paid) || 0)
-          );
-        },
-        0
-      );
-    }, [
-      rooms,
-      selectedMonth,
-    ]);
+      return sum + (Number(payment.paid) || 0);
+    }, 0);
+  }, [rooms, selectedMonth]);
 
-  /*
-    Total Due only means remaining
-    amount from a partial payment.
+  // Total due counts only the remaining amount after a partial payment.
 
-    Example:
-    Rent 8000
-    Paid 5000
-    Due 3000
+  const totalDue = useMemo(() => {
+    return rooms.reduce((sum, room) => {
+      const payment = getMonthPayment(room, selectedMonth);
 
-    Due = 3000
-  */
+      const paid = Number(payment.paid) || 0;
 
-  const totalDue =
-    useMemo(() => {
-      return rooms.reduce(
-        (sum, room) => {
-          const payment =
-            getMonthPayment(
-              room,
-              selectedMonth
-            );
+      const due = Number(payment.due) || 0;
 
-          const paid =
-            Number(payment.paid) || 0;
+      // Count only remaining due from partial payments.
+      if (paid > 0 && due > 0) {
+        return sum + due;
+      }
 
-          const due =
-            Number(payment.due) || 0;
+      return sum;
+    }, 0);
+  }, [rooms, selectedMonth]);
 
-          /*
-            Total Due This Month means only
-            the remaining amount after a
-            partial payment has been made.
+  // .....................................FILTER HELPERS........................................
 
-            Fully unpaid rent is NOT included.
-          */
-          if (
-            paid > 0 &&
-            due > 0
-          ) {
-            return sum + due;
-          }
+  const getPaymentStatus = (room) => {
+    const payment = getMonthPayment(room, selectedMonth);
 
-          return sum;
-        },
-        0
-      );
-    }, [
-      rooms,
-      selectedMonth,
-    ]);
+    const rent = Number(payment.rent) || 0;
 
-  /*
-    -----------------------------
-    FILTER HELPERS
-    -----------------------------
-  */
+    const paid = Number(payment.paid) || 0;
 
-  const getPaymentStatus = (
-    room
-  ) => {
-    const payment =
-      getMonthPayment(
-        room,
-        selectedMonth
-      );
+    const due = Number(payment.due) || 0;
 
-    const rent =
-      Number(payment.rent) || 0;
-
-    const paid =
-      Number(payment.paid) || 0;
-
-    const due =
-      Number(payment.due) || 0;
-
-    if (
-      room.status === "Vacant" ||
-      room.status === "Draft"
-    ) {
+    if (room.status === "Vacant" || room.status === "Draft") {
       return "unpaid";
     }
 
-    if (
-      rent > 0 &&
-      paid >= rent &&
-      due === 0
-    ) {
+    if (rent > 0 && paid >= rent && due === 0) {
       return "paid";
     }
 
     return "unpaid";
   };
 
-  const matchesDueAmount = (
-    room
-  ) => {
-    if (
-      filters.dueAmount === "all"
-    ) {
+  const matchesDueAmount = (room) => {
+    if (filters.dueAmount === "all") {
       return true;
     }
 
-    const payment =
-      getMonthPayment(
-        room,
-        selectedMonth
-      );
+    const payment = getMonthPayment(room, selectedMonth);
 
-    const due =
-      Number(payment.due) || 0;
+    const due = Number(payment.due) || 0;
 
-    if (
-      filters.dueAmount ===
-      "hasDue"
-    ) {
+    if (filters.dueAmount === "hasDue") {
       return due > 0;
     }
 
-    if (
-      filters.dueAmount ===
-      "noDue"
-    ) {
+    if (filters.dueAmount === "noDue") {
       return due === 0;
     }
 
     return true;
   };
 
-  const matchesBillingCycle = (
-    room
-  ) => {
-    if (
-      filters.billingCycle ===
-      "all"
-    ) {
+  const matchesBillingCycle = (room) => {
+    if (filters.billingCycle === "all") {
       return true;
     }
 
@@ -821,37 +610,21 @@ function Dashboard({
       return false;
     }
 
-    const match =
-      String(
-        room.rentCycle
-      ).match(
-        /^\s*(\d{1,2})/
-      );
+    const match = String(room.rentCycle).match(/^\s*(\d{1,2})/);
 
     if (!match) {
       return false;
     }
 
-    const billingDay =
-      Number(match[1]);
+    const billingDay = Number(match[1]);
 
-    const [min, max] =
-      filters.billingCycle
-        .split("-")
-        .map(Number);
+    const [min, max] = filters.billingCycle.split("-").map(Number);
 
-    return (
-      billingDay >= min &&
-      billingDay <= max
-    );
+    return billingDay >= min && billingDay <= max;
   };
 
-  const matchesCollectionDate = (
-    room
-  ) => {
-    if (
-      !filters.collectionDate
-    ) {
+  const matchesCollectionDate = (room) => {
+    if (!filters.collectionDate) {
       return true;
     }
 
@@ -859,44 +632,23 @@ function Dashboard({
       return false;
     }
 
-    const match =
-      String(
-        room.rentCycle
-      ).match(
-        /^\s*(\d{1,2})/
-      );
+    const match = String(room.rentCycle).match(/^\s*(\d{1,2})/);
 
     if (!match) {
       return false;
     }
 
-    const billingDay =
-      Number(match[1]);
+    const billingDay = Number(match[1]);
 
-    const selectedDate =
-      new Date(
-        `${filters.collectionDate}T00:00:00`
-      );
+    const selectedDate = new Date(`${filters.collectionDate}T00:00:00`);
 
-    return (
-      billingDay ===
-      selectedDate.getDate()
-    );
+    return billingDay === selectedDate.getDate();
   };
 
-  const matchesUpcomingCollection = (
-    room
-  ) => {
-    /*
-      Empty means the user has not
-      selected this filter.
+  const matchesUpcomingCollection = (room) => {
+    // Ignore this filter when no days are selected.
 
-      Therefore it MUST NOT hide rooms.
-    */
-
-    if (
-      !filters.upcomingDays
-    ) {
+    if (!filters.upcomingDays) {
       return true;
     }
 
@@ -904,293 +656,144 @@ function Dashboard({
       return false;
     }
 
-    const match =
-      String(
-        room.rentCycle
-      ).match(
-        /^\s*(\d{1,2})/
-      );
+    const match = String(room.rentCycle).match(/^\s*(\d{1,2})/);
 
     if (!match) {
       return false;
     }
 
-    const billingDay =
-      Number(match[1]);
+    const billingDay = Number(match[1]);
 
-    const days =
-      Number(filters.upcomingDays);
+    const days = Number(filters.upcomingDays);
 
-    const today =
-      new Date();
+    const today = new Date();
 
-    const startDate =
-      new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        today.getDate()
-      );
-
-    const endDate =
-      new Date(startDate);
-
-    endDate.setDate(
-      endDate.getDate() + days
+    const startDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
     );
 
-    /*
-      Upcoming collection should use
-      the selected month.
-    */
+    const endDate = new Date(startDate);
 
-    const [
+    endDate.setDate(endDate.getDate() + days);
+
+    // Use the selected month for the collection date.
+
+    const [selectedYear, selectedMonthNumber] = selectedMonth
+      .split("-")
+      .map(Number);
+
+    let collectionDate = new Date(
       selectedYear,
-      selectedMonthNumber,
-    ] =
-      selectedMonth
-        .split("-")
-        .map(Number);
+      selectedMonthNumber - 1,
+      billingDay,
+    );
 
-    let collectionDate =
-      new Date(
-        selectedYear,
-        selectedMonthNumber - 1,
-        billingDay
-      );
+    // Move to next month if this month's billing date has passed.
 
-    /*
-      If selected month is the current
-      month and billing date has passed,
-      the next collection belongs to
-      next month.
-    */
+    const currentMonthValue = getMonthValue(today);
 
-    const currentMonthValue =
-      getMonthValue(today);
-
-    if (
-      selectedMonth ===
-        currentMonthValue &&
-      collectionDate < startDate
-    ) {
-      collectionDate =
-        new Date(
-          selectedYear,
-          selectedMonthNumber,
-          billingDay
-        );
+    if (selectedMonth === currentMonthValue && collectionDate < startDate) {
+      collectionDate = new Date(selectedYear, selectedMonthNumber, billingDay);
     }
 
-    return (
-      collectionDate >= startDate &&
-      collectionDate <= endDate
-    );
+    return collectionDate >= startDate && collectionDate <= endDate;
   };
 
-  /*
-    -----------------------------
-    FILTER + SEARCH + SORT
-    -----------------------------
-  */
+  // .....................................FILTER + SEARCH + SORT........................................
 
-  const filteredAndSortedRooms =
-    useMemo(() => {
-      const query =
-        searchQuery
-          .trim()
-          .toLowerCase();
+  const filteredAndSortedRooms = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
 
-      let result = rooms.filter(
-        (room) => {
-          /*
-            Search
-          */
+    let result = rooms.filter((room) => {
 
-          const matchesSearch =
-            String(
-              room.number || ""
-            )
-              .toLowerCase()
-              .includes(query);
+      const matchesSearch = String(room.number || "")
+        .toLowerCase()
+        .includes(query);
 
-          if (!matchesSearch) {
-            return false;
-          }
+      if (!matchesSearch) {
+        return false;
+      }
 
-          /*
-            Payment Status
-          */
-
-          if (
-            filters.paymentStatus !==
-            "all"
-          ) {
-            if (
-              getPaymentStatus(
-                room
-              ) !==
-              filters.paymentStatus
-            ) {
-              return false;
-            }
-          }
-
-          /*
-            Due Amount
-          */
-
-          if (
-            !matchesDueAmount(
-              room
-            )
-          ) {
-            return false;
-          }
-
-          /*
-            Billing Cycle
-          */
-
-          if (
-            !matchesBillingCycle(
-              room
-            )
-          ) {
-            return false;
-          }
-
-          /*
-            Specific Collection Date
-          */
-
-          if (
-            !matchesCollectionDate(
-              room
-            )
-          ) {
-            return false;
-          }
-
-          /*
-            Upcoming Collection
-          */
-
-          if (
-            !matchesUpcomingCollection(
-              room
-            )
-          ) {
-            return false;
-          }
-
-          return true;
+      if (filters.paymentStatus !== "all") {
+        if (getPaymentStatus(room) !== filters.paymentStatus) {
+          return false;
         }
-      );
+      }
 
-      /*
-        Sorting is independent of filters.
-      */
+      if (!matchesDueAmount(room)) {
+        return false;
+      }
 
-      result.sort((a, b) => {
-        switch (sortBy) {
-          case "roomAsc":
-            return (
-              Number(a.number) -
-              Number(b.number)
-            );
+      if (!matchesBillingCycle(room)) {
+        return false;
+      }
 
-          case "roomDesc":
-            return (
-              Number(b.number) -
-              Number(a.number)
-            );
+      if (!matchesCollectionDate(room)) {
+        return false;
+      }
 
-          case "billingAsc": {
-            const aDay =
-              Number(
-                String(
-                  a.rentCycle || ""
-                ).match(
-                  /^\s*(\d{1,2})/
-                )?.[1]
-              ) || 0;
+      if (!matchesUpcomingCollection(room)) {
+        return false;
+      }
 
-            const bDay =
-              Number(
-                String(
-                  b.rentCycle || ""
-                ).match(
-                  /^\s*(\d{1,2})/
-                )?.[1]
-              ) || 0;
+      return true;
+    });
 
-            return aDay - bDay;
-          }
+    // Sorting is applied after filtering.
 
-          case "billingDesc": {
-            const aDay =
-              Number(
-                String(
-                  a.rentCycle || ""
-                ).match(
-                  /^\s*(\d{1,2})/
-                )?.[1]
-              ) || 0;
+    result.sort((a, b) => {
+      switch (sortBy) {
+        case "roomAsc":
+          return Number(a.number) - Number(b.number);
 
-            const bDay =
-              Number(
-                String(
-                  b.rentCycle || ""
-                ).match(
-                  /^\s*(\d{1,2})/
-                )?.[1]
-              ) || 0;
+        case "roomDesc":
+          return Number(b.number) - Number(a.number);
 
-            return bDay - aDay;
-          }
-          default:
-            return 0;
+        case "billingAsc": {
+          const aDay =
+            Number(String(a.rentCycle || "").match(/^\s*(\d{1,2})/)?.[1]) || 0;
+
+          const bDay =
+            Number(String(b.rentCycle || "").match(/^\s*(\d{1,2})/)?.[1]) || 0;
+
+          return aDay - bDay;
         }
-      });
 
-      return result;
-    }, [
-      rooms,
-      searchQuery,
-      filters,
-      sortBy,
-      selectedMonth,
-    ]);
+        case "billingDesc": {
+          const aDay =
+            Number(String(a.rentCycle || "").match(/^\s*(\d{1,2})/)?.[1]) || 0;
 
-  /*
-    -----------------------------
-    FILTER STATE
-    -----------------------------
-  */
+          const bDay =
+            Number(String(b.rentCycle || "").match(/^\s*(\d{1,2})/)?.[1]) || 0;
 
-  const handleApplyFilters = (
-    newFilters
-  ) => {
+          return bDay - aDay;
+        }
+        default:
+          return 0;
+      }
+    });
+
+    return result;
+  }, [rooms, searchQuery, filters, sortBy, selectedMonth]);
+
+  // .....................................FILTER STATE........................................
+
+  const handleApplyFilters = (newFilters) => {
     setFilters(newFilters);
   };
 
-  const handleSortChange = (
-    newSort
-  ) => {
+  const handleSortChange = (newSort) => {
     setSortBy(newSort);
   };
 
   const hasActiveFilters =
-    filters.paymentStatus !==
-      "all" ||
-    filters.dueAmount !==
-      "all" ||
-    filters.billingCycle !==
-      "all" ||
-    filters.collectionDate !==
-      "" ||
-    filters.upcomingDays !==
-      "";
+    filters.paymentStatus !== "all" ||
+    filters.dueAmount !== "all" ||
+    filters.billingCycle !== "all" ||
+    filters.collectionDate !== "" ||
+    filters.upcomingDays !== "";
 
   const clearAllFilters = () => {
     setFilters({
@@ -1198,36 +801,27 @@ function Dashboard({
     });
   };
 
-  /*
-    -----------------------------
-    RENDER
-    -----------------------------
-  */
+  // .....................................RENDER........................................
 
   return (
     <div
-      className={`min-h-screen transition-colors duration-300 ${
-        darkMode
-          ? "bg-slate-950 text-white"
-          : "bg-slate-100 text-slate-900"
+      className={`transition-colors min-h-screen duration-300 ${
+        darkMode ? "text-white bg-slate-950" : "text-slate-900 bg-slate-100"
       }`}
     >
-      {/* Dashboard Header */}
 
       <header
         className={`border-b shadow-sm ${
           darkMode
-            ? "border-slate-800 bg-slate-900"
-            : "border-slate-200 bg-white"
+            ? "bg-slate-900 border-slate-800"
+            : "bg-white border-slate-200"
         }`}
       >
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
+        <div className="max-w-7xl px-6 h-16 mx-auto lg:px-8 flex items-center justify-between">
           <div>
             <h1
-              className={`text-2xl font-extrabold tracking-tight ${
-                darkMode
-                  ? "text-white"
-                  : "text-slate-800"
+              className={`font-extrabold tracking-tight text-2xl ${
+                darkMode ? "text-white" : "text-slate-800"
               }`}
             >
               Landlord Desk
@@ -1236,9 +830,7 @@ function Dashboard({
             {user && (
               <p
                 className={`text-xs ${
-                  darkMode
-                    ? "text-slate-400"
-                    : "text-slate-500"
+                  darkMode ? "text-slate-400" : "text-slate-500"
                 }`}
               >
                 Welcome, {user.name}
@@ -1246,19 +838,14 @@ function Dashboard({
             )}
           </div>
 
-          <div className="relative flex items-center">
+          <div className="items-center flex relative">
             <button
               type="button"
-              onClick={() =>
-                setShowProfile(
-                  (previous) =>
-                    !previous
-                )
-              }
-              className={`flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 text-lg shadow-sm transition ${
+              onClick={() => setShowProfile((previous) => !previous)}
+              className={`h-10 text-lg overflow-hidden flex transition shadow-sm w-10 items-center border-2 justify-center rounded-full ${
                 darkMode
-                  ? "border-slate-600 bg-slate-800 hover:border-indigo-400"
-                  : "border-slate-200 bg-slate-100 hover:border-indigo-400"
+                  ? "bg-slate-800 border-slate-600 hover:border-indigo-400"
+                  : "hover:border-indigo-400 border-slate-200 bg-slate-100"
               }`}
               aria-label="Profile"
             >
@@ -1266,7 +853,7 @@ function Dashboard({
                 <img
                   src={profileImage}
                   alt="Profile"
-                  className="h-full w-full object-cover"
+                  className="w-full object-cover h-full"
                 />
               ) : (
                 "👤"
@@ -1276,40 +863,25 @@ function Dashboard({
             {showProfile && (
               <Profile
                 darkMode={darkMode}
-                onClose={() =>
-                  setShowProfile(false)
-                }
-                onOpenSettings={
-                  handleOpenSettings
-                }
-                onLogout={
-                  handleLogout
-                }
-                profileImage={
-                  profileImage
-                }
-                setProfileImage={
-                  setProfileImage
-                }
+                onClose={() => setShowProfile(false)}
+                onOpenSettings={handleOpenSettings}
+                onLogout={handleLogout}
+                profileImage={profileImage}
+                setProfileImage={setProfileImage}
               />
             )}
           </div>
         </div>
       </header>
 
-      {/* Main Dashboard */}
-
-      <main className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
+      <main className="py-8 px-6 mx-auto lg:px-8 max-w-7xl">
         <section>
-          {/* Month Selector */}
 
-          <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex-col sm:justify-between sm:items-center sm:flex-row gap-2 mb-5 flex">
             <div>
               <p
-                className={`text-sm font-medium ${
-                  darkMode
-                    ? "text-slate-300"
-                    : "text-slate-700"
+                className={`font-medium text-sm ${
+                  darkMode ? "text-slate-300" : "text-slate-700"
                 }`}
               >
                 Dashboard Month
@@ -1317,64 +889,42 @@ function Dashboard({
 
               <p
                 className={`text-xs ${
-                  darkMode
-                    ? "text-slate-500"
-                    : "text-slate-400"
+                  darkMode ? "text-slate-500" : "text-slate-400"
                 }`}
               >
-                Select a month to view its
-                rent data
+                Select a month to view its rent data
               </p>
             </div>
 
             <select
               value={selectedMonth}
-              onChange={(event) =>
-                setSelectedMonth(
-                  event.target.value
-                )
-              }
-              className={`w-full rounded-xl border px-4 py-2.5 text-sm font-medium outline-none transition sm:w-56 ${
+              onChange={(event) => setSelectedMonth(event.target.value)}
+              className={`font-medium sm:w-56 rounded-xl py-2.5 text-sm transition px-4 border w-full outline-none ${
                 darkMode
-                  ? "border-slate-700 bg-slate-900 text-slate-100 focus:border-emerald-500"
-                  : "border-slate-300 bg-white text-slate-800 focus:border-emerald-500"
+                  ? "text-slate-100 border-slate-700 focus:border-emerald-500 bg-slate-900"
+                  : "text-slate-800 bg-white border-slate-300 focus:border-emerald-500"
               }`}
             >
-              {MONTH_OPTIONS.map(
-                (month) => (
-                  <option
-                    key={month.value}
-                    value={month.value}
-                  >
-                    {month.label}
-                  </option>
-                )
-              )}
+              {MONTH_OPTIONS.map((month) => (
+                <option key={month.value} value={month.value}>
+                  {month.label}
+                </option>
+              ))}
             </select>
           </div>
-
-          {/* Summary */}
 
           <CollectionSummary
             darkMode={darkMode}
             totalRooms={rooms.length}
-            thisMonthCollection={
-              thisMonthCollection
-            }
+            thisMonthCollection={thisMonthCollection}
             totalDue={totalDue}
-            onAddRoom={
-              handleAddRoom
-            }
+            onAddRoom={handleAddRoom}
           />
 
-          {/* Rooms Heading */}
-
-          <div className="mb-5 mt-8">
+          <div className="mt-8 mb-5">
             <h2
               className={`text-2xl font-extrabold tracking-tight ${
-                darkMode
-                  ? "text-white"
-                  : "text-slate-800"
+                darkMode ? "text-white" : "text-slate-800"
               }`}
             >
               Your Rooms
@@ -1382,57 +932,45 @@ function Dashboard({
 
             <p
               className={`mt-1 text-sm ${
-                darkMode
-                  ? "text-slate-400"
-                  : "text-slate-500"
+                darkMode ? "text-slate-400" : "text-slate-500"
               }`}
             >
-              Manage your rooms and
-              rent collection
+              Manage your rooms and rent collection
             </p>
           </div>
 
-          {/* Search + Filter + Sort */}
-
           {rooms.length > 0 && (
             <div
-              className={`mb-6 rounded-2xl border p-4 shadow-sm ${
+              className={`shadow-sm p-4 rounded-2xl mb-6 border ${
                 darkMode
-                  ? "border-slate-800 bg-slate-900"
+                  ? "bg-slate-900 border-slate-800"
                   : "border-slate-200 bg-white"
               }`}
             >
-              <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-                {/* Search */}
+              <div className="flex lg:flex-row gap-3 lg:items-center flex-col">
 
                 <div className="relative flex-1">
                   <input
                     id="room-search"
                     type="search"
                     value={searchQuery}
-                    onChange={(event) =>
-                      setSearchQuery(
-                        event.target.value
-                      )
-                    }
+                    onChange={(event) => setSearchQuery(event.target.value)}
                     placeholder="Search by room number"
-                    className={`w-full rounded-xl border px-4 py-3 pr-10 text-sm outline-none transition ${
+                    className={`border pr-10 py-3 text-sm w-full px-4 rounded-xl transition outline-none ${
                       darkMode
-                        ? "border-slate-700 bg-slate-800 text-slate-100 placeholder:text-slate-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-                        : "border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                        ? "bg-slate-800 focus:ring-2 border-slate-700 text-slate-100 placeholder:text-slate-500 focus:border-emerald-500 focus:ring-emerald-500/20"
+                        : "placeholder:text-slate-400 border-slate-300 focus:ring-emerald-500/20 focus:border-emerald-500 focus:ring-2 bg-white text-slate-900"
                     }`}
                   />
 
                   {searchQuery && (
                     <button
                       type="button"
-                      onClick={() =>
-                        setSearchQuery("")
-                      }
-                      className={`absolute right-3 top-1/2 -translate-y-1/2 text-sm ${
+                      onClick={() => setSearchQuery("")}
+                      className={`absolute -translate-y-1/2 top-1/2 right-3 text-sm ${
                         darkMode
                           ? "text-slate-500 hover:text-slate-300"
-                          : "text-slate-400 hover:text-slate-700"
+                          : "hover:text-slate-700 text-slate-400"
                       }`}
                       aria-label="Clear room search"
                     >
@@ -1441,112 +979,78 @@ function Dashboard({
                   )}
                 </div>
 
-                {/* Filter */}
-
                 <button
                   type="button"
-                  onClick={() =>
-                    setShowFilters(true)
-                  }
-                  className={`rounded-xl border px-5 py-3 text-sm font-semibold transition ${
+                  onClick={() => setShowFilters(true)}
+                  className={`text-sm rounded-xl border px-5 py-3 transition font-semibold ${
                     hasActiveFilters
-                      ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
+                      ? "text-emerald-400 bg-emerald-500/10 border-emerald-500"
                       : darkMode
-                        ? "border-slate-700 bg-slate-800 text-slate-200 hover:border-emerald-500 hover:text-emerald-400"
-                        : "border-slate-300 bg-white text-slate-700 hover:border-emerald-500 hover:text-emerald-600"
+                        ? "hover:border-emerald-500 hover:text-emerald-400 bg-slate-800 border-slate-700 text-slate-200"
+                        : "border-slate-300 hover:border-emerald-500 bg-white text-slate-700 hover:text-emerald-600"
                   }`}
                 >
                   Filter
-                  {hasActiveFilters &&
-                    " • Active"}
+                  {hasActiveFilters && " • Active"}
                 </button>
-
-                {/* Sort */}
 
                 <button
                   type="button"
-                  onClick={() =>
-                    setShowSort(true)
-                  }
-                  className={`rounded-xl border px-5 py-3 text-sm font-semibold transition ${
+                  onClick={() => setShowSort(true)}
+                  className={`border transition px-5 rounded-xl font-semibold text-sm py-3 ${
                     darkMode
-                      ? "border-slate-700 bg-slate-800 text-slate-200 hover:border-emerald-500 hover:text-emerald-400"
-                      : "border-slate-300 bg-white text-slate-700 hover:border-emerald-500 hover:text-emerald-600"
+                      ? "hover:text-emerald-400 text-slate-200 border-slate-700 bg-slate-800 hover:border-emerald-500"
+                      : "border-slate-300 hover:border-emerald-500 bg-white text-slate-700 hover:text-emerald-600"
                   }`}
                 >
                   Sort
                 </button>
               </div>
 
-              {/* Active Filters */}
-
               {hasActiveFilters && (
-                <div className="mt-3 flex flex-wrap items-center gap-2">
+                <div className="items-center flex mt-3 gap-2 flex-wrap">
                   <span
                     className={`text-xs ${
-                      darkMode
-                        ? "text-slate-400"
-                        : "text-slate-500"
+                      darkMode ? "text-slate-400" : "text-slate-500"
                     }`}
                   >
                     Active filters:
                   </span>
 
-                  {filters.paymentStatus !==
-                    "all" && (
-                    <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
-                      {filters.paymentStatus ===
-                      "paid"
-                        ? "Paid"
-                        : "Unpaid"}
+                  {filters.paymentStatus !== "all" && (
+                    <span className="text-xs font-medium py-1 bg-emerald-500/10 px-3 rounded-full text-emerald-400">
+                      {filters.paymentStatus === "paid" ? "Paid" : "Unpaid"}
                     </span>
                   )}
 
-                  {filters.dueAmount !==
-                    "all" && (
-                    <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
-                      {filters.dueAmount ===
-                      "hasDue"
-                        ? "Has Due"
-                        : "No Due"}
+                  {filters.dueAmount !== "all" && (
+                    <span className="bg-emerald-500/10 py-1 text-xs rounded-full text-emerald-400 font-medium px-3">
+                      {filters.dueAmount === "hasDue" ? "Has Due" : "No Due"}
                     </span>
                   )}
 
-                  {filters.billingCycle !==
-                    "all" && (
-                    <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
-                      Billing{" "}
-                      {
-                        filters.billingCycle
-                      }
+                  {filters.billingCycle !== "all" && (
+                    <span className="font-medium text-xs py-1 bg-emerald-500/10 px-3 rounded-full text-emerald-400">
+                      Billing {filters.billingCycle}
                     </span>
                   )}
 
                   {filters.collectionDate && (
-                    <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
-                      Collection{" "}
-                      {
-                        filters.collectionDate
-                      }
+                    <span className="text-xs rounded-full px-3 bg-emerald-500/10 py-1 font-medium text-emerald-400">
+                      Collection {filters.collectionDate}
                     </span>
                   )}
 
                   {filters.upcomingDays && (
-                    <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
-                      Next{" "}
-                      {
-                        filters.upcomingDays
-                      }{" "}
-                      Days
+                    <span className="font-medium text-emerald-400 py-1 px-3 rounded-full text-xs bg-emerald-500/10">
+                      Next {filters.upcomingDays} Days
                     </span>
                   )}
 
                   <button
                     type="button"
-                    onClick={
-                      clearAllFilters
-                    }
-                    className="ml-1 text-xs font-medium text-slate-400 transition hover:text-red-400"
+                    onClick={clearAllFilters}
+                    className="transition text-xs hover:text-red-400 ml-1 font-medium text-slate-400"
                   >
                     Clear all
                   </button>
@@ -1555,176 +1059,113 @@ function Dashboard({
             </div>
           )}
 
-          {/* Result Count */}
-
           {rooms.length > 0 && (
             <div className="mb-4">
               <p
                 className={`text-sm ${
-                  darkMode
-                    ? "text-slate-400"
-                    : "text-slate-500"
+                  darkMode ? "text-slate-400" : "text-slate-500"
                 }`}
               >
-                Showing{" "}
-                {
-                  filteredAndSortedRooms.length
-                }{" "}
-                of {rooms.length} rooms
+                Showing {filteredAndSortedRooms.length} of {rooms.length} rooms
               </p>
             </div>
           )}
 
-          {/* Room Cards */}
-
-          {filteredAndSortedRooms.length >
-            0 && (
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-              {filteredAndSortedRooms.map(
-                (room) => (
-                  <RoomCard
-                    key={room.id}
-                    room={room}
-                    expanded={
-                      expandedRoom ===
-                      room.id
-                    }
-                    onToggle={() =>
-                      setExpandedRoom(
-                        expandedRoom ===
-                          room.id
-                          ? null
-                          : room.id
-                      )
-                    }
-                    onUpdate={
-                      handleRoomUpdate
-                    }
-                    onDelete={
-                      handleRoomDelete
-                    }
-                  />
-                )
-              )}
+          {filteredAndSortedRooms.length > 0 && (
+            <div className="grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 grid">
+              {filteredAndSortedRooms.map((room) => (
+                <RoomCard
+                  key={room.id}
+                  room={room}
+                  expanded={expandedRoom === room.id}
+                  onToggle={() =>
+                    setExpandedRoom(expandedRoom === room.id ? null : room.id)
+                  }
+                  onUpdate={handleRoomUpdate}
+                  onDelete={handleRoomDelete}
+                />
+              ))}
             </div>
           )}
 
-          {/* No Rooms */}
-
           {rooms.length === 0 && (
             <div
-              className={`rounded-3xl border-2 border-dashed p-16 text-center ${
+              className={`border-2 border-dashed p-16 rounded-3xl text-center ${
                 darkMode
                   ? "border-slate-700 bg-slate-900"
                   : "border-slate-300 bg-white"
               }`}
             >
-              <div className="text-5xl">
-                🏠
-              </div>
+              <div className="text-5xl">🏠</div>
 
-              <h3 className="mt-5 text-xl font-bold">
-                No rooms yet
-              </h3>
+              <h3 className="font-bold mt-5 text-xl">No rooms yet</h3>
 
               <p
-                className={`mt-2 text-sm ${
-                  darkMode
-                    ? "text-slate-400"
-                    : "text-slate-500"
+                className={`text-sm mt-2 ${
+                  darkMode ? "text-slate-400" : "text-slate-500"
                 }`}
               >
-                Use the Add New Room
-                button above to get
-                started.
+                Use the Add New Room button above to get started.
               </p>
             </div>
           )}
 
-          {/* No Results */}
+          {rooms.length > 0 && filteredAndSortedRooms.length === 0 && (
+            <div
+              className={`border-dashed text-center border-2 rounded-3xl p-12 ${
+                darkMode
+                  ? "bg-slate-900 border-slate-700"
+                  : "border-slate-300 bg-white"
+              }`}
+            >
+              <div className="text-4xl">🔍</div>
 
-          {rooms.length > 0 &&
-            filteredAndSortedRooms.length ===
-              0 && (
-              <div
-                className={`rounded-3xl border-2 border-dashed p-12 text-center ${
-                  darkMode
-                    ? "border-slate-700 bg-slate-900"
-                    : "border-slate-300 bg-white"
+              <h3 className="mt-4 font-bold text-lg">No room found</h3>
+
+              <p
+                className={`mt-2 text-sm ${
+                  darkMode ? "text-slate-400" : "text-slate-500"
                 }`}
               >
-                <div className="text-4xl">
-                  🔍
-                </div>
+                No room matches the current search, month, or filters.
+              </p>
 
-                <h3 className="mt-4 text-lg font-bold">
-                  No room found
-                </h3>
-
-                <p
-                  className={`mt-2 text-sm ${
-                    darkMode
-                      ? "text-slate-400"
-                      : "text-slate-500"
-                  }`}
-                >
-                  No room matches the
-                  current search, month,
-                  or filters.
-                </p>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSearchQuery("");
-                    clearAllFilters();
-                  }}
-                  className="mt-4 rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-emerald-400"
-                >
-                  Clear Search & Filters
-                </button>
-              </div>
-            )}
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("");
+                  clearAllFilters();
+                }}
+                className="font-semibold hover:bg-emerald-400 transition mt-4 px-4 rounded-lg py-2 text-sm bg-emerald-500 text-slate-950"
+              >
+                Clear Search & Filters
+              </button>
+            </div>
+          )}
         </section>
       </main>
-
-      {/* Filter Modal */}
 
       {showFilters && (
         <RoomFilters
           darkMode={darkMode}
           filters={filters}
-          onApply={
-            handleApplyFilters
-          }
-          onClose={() =>
-            setShowFilters(false)
-          }
+          onApply={handleApplyFilters}
+          onClose={() => setShowFilters(false)}
         />
       )}
-
-      {/* Sort Modal */}
 
       {showSort && (
         <RoomSort
           darkMode={darkMode}
           sortBy={sortBy}
-          onSortChange={
-            handleSortChange
-          }
-          onClose={() =>
-            setShowSort(false)
-          }
+          onSortChange={handleSortChange}
+          onClose={() => setShowSort(false)}
         />
       )}
 
-      {/* Settings */}
-
       {showSettings && (
         <Settings
-          onClose={() =>
-            setShowSettings(false)
-          }
+          onClose={() => setShowSettings(false)}
           darkMode={darkMode}
           setDarkMode={setDarkMode}
         />

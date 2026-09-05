@@ -19,28 +19,18 @@ import Navbar from "./components/Navbar";
 
 import { useAuth } from "./context/AuthContext";
 
-function MainLayout({
-  darkMode,
-  setDarkMode,
-}) {
+function MainLayout({ darkMode, setDarkMode }) {
   return (
     <div
       className={`h-screen overflow-hidden transition-colors duration-300 ${
-        darkMode
-          ? "bg-slate-950"
-          : "bg-slate-200"
+        darkMode ? "bg-slate-950" : "bg-slate-200"
       }`}
     >
-      <Navbar
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-      />
+      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
       <main
         className={`h-[calc(100vh-64px)] overflow-hidden ${
-          darkMode
-            ? "bg-slate-950"
-            : "bg-slate-200"
+          darkMode ? "bg-slate-950" : "bg-slate-200"
         }`}
       >
         <Outlet />
@@ -49,28 +39,19 @@ function MainLayout({
   );
 }
 
-function ProtectedRoute({
-  darkMode,
-  setDarkMode,
-}) {
+function ProtectedRoute({ darkMode, setDarkMode }) {
   const { user } = useAuth();
 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  return (
-    <Dashboard
-      darkMode={darkMode}
-      setDarkMode={setDarkMode}
-    />
-  );
+  return <Dashboard darkMode={darkMode} setDarkMode={setDarkMode} />;
 }
 
 function App() {
   const [darkMode, setDarkMode] = useState(() => {
-    const savedMode =
-      localStorage.getItem("landlord_dark_mode");
+    const savedMode = localStorage.getItem("landlord_dark_mode");
 
     if (savedMode === null) {
       return true;
@@ -80,60 +61,26 @@ function App() {
   });
 
   useEffect(() => {
-    localStorage.setItem(
-      "landlord_dark_mode",
-      darkMode
-    );
+    localStorage.setItem("landlord_dark_mode", darkMode);
   }, [darkMode]);
 
   return (
     <BrowserRouter basename="/landlord_desk">
       <Routes>
-
         {/* Public Pages */}
 
         <Route
-          element={
-            <MainLayout
-              darkMode={darkMode}
-              setDarkMode={setDarkMode}
-            />
-          }
+          element={<MainLayout darkMode={darkMode} setDarkMode={setDarkMode} />}
         >
-          <Route
-            path="/"
-            element={
-              <Home darkMode={darkMode} />
-            }
-          />
+          <Route path="/" element={<Home darkMode={darkMode} />} />
 
-          <Route
-            path="/about"
-            element={
-              <About darkMode={darkMode} />
-            }
-          />
+          <Route path="/about" element={<About darkMode={darkMode} />} />
 
-          <Route
-            path="/contact"
-            element={
-              <Contact darkMode={darkMode} />
-            }
-          />
+          <Route path="/contact" element={<Contact darkMode={darkMode} />} />
 
-          <Route
-            path="/login"
-            element={
-              <Login darkMode={darkMode} />
-            }
-          />
+          <Route path="/login" element={<Login darkMode={darkMode} />} />
 
-          <Route
-            path="/signup"
-            element={
-              <Signup darkMode={darkMode} />
-            }
-          />
+          <Route path="/signup" element={<Signup darkMode={darkMode} />} />
         </Route>
 
         {/* Protected Dashboard */}
@@ -141,13 +88,9 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute
-              darkMode={darkMode}
-              setDarkMode={setDarkMode}
-            />
+            <ProtectedRoute darkMode={darkMode} setDarkMode={setDarkMode} />
           }
         />
-
       </Routes>
     </BrowserRouter>
   );

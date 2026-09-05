@@ -8,8 +8,7 @@ const SESSION_KEY = "landlord_desk_session";
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
     try {
-      const savedSession =
-        localStorage.getItem(SESSION_KEY);
+      const savedSession = localStorage.getItem(SESSION_KEY);
 
       if (!savedSession) {
         return null;
@@ -23,31 +22,24 @@ export function AuthProvider({ children }) {
   });
 
   const signup = (accountData) => {
-    const existingAccount =
-      localStorage.getItem(ACCOUNT_KEY);
+    const existingAccount = localStorage.getItem(ACCOUNT_KEY);
 
     if (existingAccount) {
       const account = JSON.parse(existingAccount);
 
       if (
-        account.email.toLowerCase() ===
-        accountData.email.trim().toLowerCase()
+        account.email.toLowerCase() === accountData.email.trim().toLowerCase()
       ) {
         return {
           success: false,
-          message:
-            "An account with this email already exists.",
+          message: "An account with this email already exists.",
         };
       }
 
-      if (
-        account.mobile ===
-        accountData.mobile.trim()
-      ) {
+      if (account.mobile === accountData.mobile.trim()) {
         return {
           success: false,
-          message:
-            "An account with this mobile number already exists.",
+          message: "An account with this mobile number already exists.",
         };
       }
     }
@@ -59,10 +51,7 @@ export function AuthProvider({ children }) {
       password: accountData.password,
     };
 
-    localStorage.setItem(
-      ACCOUNT_KEY,
-      JSON.stringify(account)
-    );
+    localStorage.setItem(ACCOUNT_KEY, JSON.stringify(account));
 
     return {
       success: true,
@@ -71,14 +60,12 @@ export function AuthProvider({ children }) {
   };
 
   const login = (loginValue, password) => {
-    const savedAccount =
-      localStorage.getItem(ACCOUNT_KEY);
+    const savedAccount = localStorage.getItem(ACCOUNT_KEY);
 
     if (!savedAccount) {
       return {
         success: false,
-        message:
-          "No account found. Please create an account first.",
+        message: "No account found. Please create an account first.",
       };
     }
 
@@ -86,20 +73,13 @@ export function AuthProvider({ children }) {
 
     const value = loginValue.trim();
 
-    const emailMatches =
-      account.email.toLowerCase() ===
-      value.toLowerCase();
+    const emailMatches = account.email.toLowerCase() === value.toLowerCase();
 
-    const mobileMatches =
-      account.mobile === value;
+    const mobileMatches = account.mobile === value;
 
-    const passwordMatches =
-      account.password === password;
+    const passwordMatches = account.password === password;
 
-    if (
-      (!emailMatches && !mobileMatches) ||
-      !passwordMatches
-    ) {
+    if ((!emailMatches && !mobileMatches) || !passwordMatches) {
       return {
         success: false,
         message: "Invalid email/mobile or password.",
@@ -112,10 +92,7 @@ export function AuthProvider({ children }) {
       mobile: account.mobile,
     };
 
-    localStorage.setItem(
-      SESSION_KEY,
-      JSON.stringify(sessionUser)
-    );
+    localStorage.setItem(SESSION_KEY, JSON.stringify(sessionUser));
 
     setUser(sessionUser);
 

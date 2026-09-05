@@ -25,6 +25,7 @@ function Profile({
 
   const [editing, setEditing] = useState(false);
 
+  // .........................................Load Profile Data ...........................................
   useEffect(() => {
     /*
       Clear old profile data once.
@@ -33,25 +34,17 @@ function Profile({
       information in localStorage. This removes that old data
       without requiring the user to manually clear the browser.
     */
-    const profileVersion = localStorage.getItem(
-      PROFILE_VERSION_KEY
-    );
+    const profileVersion = localStorage.getItem(PROFILE_VERSION_KEY);
 
     if (!profileVersion) {
       localStorage.removeItem(PROFILE_KEY);
 
-      localStorage.setItem(
-        PROFILE_VERSION_KEY,
-        "2"
-      );
+      localStorage.setItem(PROFILE_VERSION_KEY, "2");
     }
 
-    const savedProfile =
-      localStorage.getItem(PROFILE_KEY);
+    const savedProfile = localStorage.getItem(PROFILE_KEY);
 
-    const savedData = savedProfile
-      ? JSON.parse(savedProfile)
-      : {};
+    const savedData = savedProfile ? JSON.parse(savedProfile) : {};
 
     setProfile({
       name: user?.name || "",
@@ -63,6 +56,7 @@ function Profile({
     });
   }, [user, profileImage]);
 
+  // ........................ Handle Profile Changes...........................................
   const handleChange = (field, value) => {
     setProfile((previous) => ({
       ...previous,
@@ -70,6 +64,7 @@ function Profile({
     }));
   };
 
+  // .............................. Handle Profile Image...........................................
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -93,6 +88,7 @@ function Profile({
     reader.readAsDataURL(file);
   };
 
+  // ..................................Save Profile.................................
   const handleSave = () => {
     const profileData = {
       name: user?.name || "",
@@ -103,16 +99,14 @@ function Profile({
       image: profile.image || "",
     };
 
-    localStorage.setItem(
-      PROFILE_KEY,
-      JSON.stringify(profileData)
-    );
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(profileData));
 
     setProfile(profileData);
     setProfileImage(profileData.image || "");
     setEditing(false);
   };
 
+  // ...........................................Logout..............................
   const handleLogout = () => {
     onLogout();
   };
@@ -123,17 +117,18 @@ function Profile({
         onClick={(e) => e.stopPropagation()}
         className={`relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border p-6 shadow-2xl sm:p-8 ${
           darkMode
-            ? "border-slate-700 bg-slate-900"
-            : "border-slate-300 bg-white"
+            ? "bg-slate-900 border-slate-700"
+            : "bg-white border-slate-300"
         }`}
       >
+        {/* ...........................................Profile Header................................ */}
         <button
           type="button"
           onClick={onClose}
           className={`absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full border text-sm transition ${
             darkMode
-              ? "border-slate-600 bg-slate-800 text-slate-300 hover:border-red-400 hover:text-red-400"
-              : "border-slate-300 bg-slate-100 text-slate-700 hover:border-red-400 hover:text-red-600"
+              ? "text-slate-300 hover:text-red-400 border-slate-600 bg-slate-800 hover:border-red-400"
+              : "bg-slate-100 border-slate-300 text-slate-700 hover:text-red-600 hover:border-red-400"
           }`}
         >
           ✕
@@ -142,9 +137,7 @@ function Profile({
         <div className="pr-12">
           <p
             className={`text-sm font-semibold uppercase tracking-widest ${
-              darkMode
-                ? "text-indigo-400"
-                : "text-indigo-600"
+              darkMode ? "text-indigo-400" : "text-indigo-600"
             }`}
           >
             Account
@@ -152,9 +145,7 @@ function Profile({
 
           <h2
             className={`mt-2 text-3xl font-bold ${
-              darkMode
-                ? "text-slate-100"
-                : "text-slate-900"
+              darkMode ? "text-slate-100" : "text-slate-900"
             }`}
           >
             Profile
@@ -162,21 +153,20 @@ function Profile({
 
           <p
             className={`mt-2 text-sm ${
-              darkMode
-                ? "text-slate-400"
-                : "text-slate-600"
+              darkMode ? "text-slate-400" : "text-slate-600"
             }`}
           >
             Manage your personal profile information.
           </p>
         </div>
 
+        {/* ...........................................Profile Photo................................ */}
         <div className="mt-8 flex flex-col items-center">
           <div
             className={`flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 ${
               darkMode
-                ? "border-slate-700 bg-slate-800"
-                : "border-slate-200 bg-slate-100"
+                ? "bg-slate-800 border-slate-700"
+                : "bg-slate-100 border-slate-200"
             }`}
           >
             {profile.image ? (
@@ -188,14 +178,10 @@ function Profile({
             ) : (
               <span
                 className={`text-3xl font-bold ${
-                  darkMode
-                    ? "text-indigo-400"
-                    : "text-indigo-600"
+                  darkMode ? "text-indigo-400" : "text-indigo-600"
                 }`}
               >
-                {profile.name
-                  ? profile.name.charAt(0).toUpperCase()
-                  : "U"}
+                {profile.name ? profile.name.charAt(0).toUpperCase() : "U"}
               </span>
             )}
           </div>
@@ -204,12 +190,11 @@ function Profile({
             <label
               className={`mt-4 cursor-pointer rounded-lg border px-4 py-2 text-sm font-semibold transition ${
                 darkMode
-                  ? "border-slate-600 bg-slate-800 text-slate-300 hover:bg-slate-700"
-                  : "border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  ? "bg-slate-800 text-slate-300 border-slate-600 hover:bg-slate-700"
+                  : "text-slate-700 bg-slate-100 border-slate-300 hover:bg-slate-200"
               }`}
             >
               Change Photo
-
               <input
                 type="file"
                 accept="image/*"
@@ -220,13 +205,12 @@ function Profile({
           )}
         </div>
 
+        {/* ........................................... Profile Information................................ */}
         <div className="mt-8 grid gap-5 sm:grid-cols-2">
           <div>
             <label
               className={`mb-2 block text-sm font-semibold ${
-                darkMode
-                  ? "text-slate-300"
-                  : "text-slate-800"
+                darkMode ? "text-slate-300" : "text-slate-800"
               }`}
             >
               Name
@@ -238,8 +222,8 @@ function Profile({
               disabled
               className={`w-full rounded-lg border px-4 py-3 text-sm outline-none ${
                 darkMode
-                  ? "border-slate-700 bg-slate-800 text-slate-400"
-                  : "border-slate-300 bg-slate-100 text-slate-600"
+                  ? "bg-slate-800 text-slate-400 border-slate-700"
+                  : "text-slate-600 border-slate-300 bg-slate-100"
               }`}
             />
           </div>
@@ -247,9 +231,7 @@ function Profile({
           <div>
             <label
               className={`mb-2 block text-sm font-semibold ${
-                darkMode
-                  ? "text-slate-300"
-                  : "text-slate-800"
+                darkMode ? "text-slate-300" : "text-slate-800"
               }`}
             >
               Email
@@ -261,8 +243,8 @@ function Profile({
               disabled
               className={`w-full rounded-lg border px-4 py-3 text-sm outline-none ${
                 darkMode
-                  ? "border-slate-700 bg-slate-800 text-slate-400"
-                  : "border-slate-300 bg-slate-100 text-slate-600"
+                  ? "text-slate-400 border-slate-700 bg-slate-800"
+                  : "bg-slate-100 text-slate-600 border-slate-300"
               }`}
             />
           </div>
@@ -270,9 +252,7 @@ function Profile({
           <div>
             <label
               className={`mb-2 block text-sm font-semibold ${
-                darkMode
-                  ? "text-slate-300"
-                  : "text-slate-800"
+                darkMode ? "text-slate-300" : "text-slate-800"
               }`}
             >
               Mobile Number
@@ -284,8 +264,8 @@ function Profile({
               disabled
               className={`w-full rounded-lg border px-4 py-3 text-sm outline-none ${
                 darkMode
-                  ? "border-slate-700 bg-slate-800 text-slate-400"
-                  : "border-slate-300 bg-slate-100 text-slate-600"
+                  ? "bg-slate-800 border-slate-700 text-slate-400"
+                  : "text-slate-600 bg-slate-100 border-slate-300"
               }`}
             />
           </div>
@@ -293,9 +273,7 @@ function Profile({
           <div>
             <label
               className={`mb-2 block text-sm font-semibold ${
-                darkMode
-                  ? "text-slate-300"
-                  : "text-slate-800"
+                darkMode ? "text-slate-300" : "text-slate-800"
               }`}
             >
               Age
@@ -306,15 +284,13 @@ function Profile({
               min="18"
               max="100"
               value={profile.age}
-              onChange={(e) =>
-                handleChange("age", e.target.value)
-              }
+              onChange={(e) => handleChange("age", e.target.value)}
               disabled={!editing}
               placeholder="Enter your age"
               className={`w-full rounded-lg border px-4 py-3 text-sm outline-none transition ${
                 darkMode
-                  ? "border-slate-700 bg-slate-700 text-slate-100 placeholder:text-slate-400 focus:border-indigo-500"
-                  : "border-slate-400 bg-slate-100 text-slate-900 placeholder:text-slate-500 focus:border-indigo-600"
+                  ? "text-slate-100 placeholder:text-slate-400 border-slate-700 focus:border-indigo-500 bg-slate-700"
+                  : "bg-slate-100 focus:border-indigo-600 text-slate-900 border-slate-400 placeholder:text-slate-500"
               }`}
             />
           </div>
@@ -322,9 +298,7 @@ function Profile({
           <div className="sm:col-span-2">
             <label
               className={`mb-2 block text-sm font-semibold ${
-                darkMode
-                  ? "text-slate-300"
-                  : "text-slate-800"
+                darkMode ? "text-slate-300" : "text-slate-800"
               }`}
             >
               Address
@@ -332,21 +306,20 @@ function Profile({
 
             <textarea
               value={profile.address}
-              onChange={(e) =>
-                handleChange("address", e.target.value)
-              }
+              onChange={(e) => handleChange("address", e.target.value)}
               disabled={!editing}
               placeholder="Enter your address"
               rows="3"
               className={`w-full resize-none rounded-lg border px-4 py-3 text-sm outline-none transition ${
                 darkMode
-                  ? "border-slate-700 bg-slate-700 text-slate-100 placeholder:text-slate-400 focus:border-indigo-500"
-                  : "border-slate-400 bg-slate-100 text-slate-900 placeholder:text-slate-500 focus:border-indigo-600"
+                  ? "bg-slate-700 text-slate-100 focus:border-indigo-500 placeholder:text-slate-400 border-slate-700"
+                  : "placeholder:text-slate-500 text-slate-900 bg-slate-100 border-slate-400 focus:border-indigo-600"
               }`}
             />
           </div>
         </div>
 
+        {/* ...........................................Profile Actions................................... */}
         <div className="mt-8 flex flex-wrap gap-3">
           {!editing ? (
             <button
@@ -371,8 +344,8 @@ function Profile({
             onClick={onOpenSettings}
             className={`rounded-lg border px-5 py-2.5 text-sm font-semibold transition ${
               darkMode
-                ? "border-slate-600 bg-slate-800 text-slate-200 hover:bg-slate-700"
-                : "border-slate-300 bg-slate-100 text-slate-800 hover:bg-slate-200"
+                ? "text-slate-200 bg-slate-800 border-slate-600 hover:bg-slate-700"
+                : "bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-800"
             }`}
           >
             Settings
