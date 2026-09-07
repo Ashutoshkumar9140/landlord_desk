@@ -115,11 +115,12 @@ function Profile({
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 px-4 py-8">
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border p-6 shadow-2xl sm:p-8 hide-scrollbar ${
-          darkMode
-            ? "bg-slate-900 border-slate-700"
-            : "bg-white border-slate-300"
-        }`}
+        className={`relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl
+           border p-6 shadow-2xl sm:p-8 hide-scrollbar ${
+             darkMode
+               ? "bg-slate-900 border-slate-700"
+               : "bg-white border-slate-300"
+           }`}
       >
         {/* ...........................................Profile Header................................ */}
 
@@ -358,7 +359,8 @@ function Profile({
           <button
             type="button"
             onClick={handleLogout}
-            className="rounded-lg border border-red-500/40 bg-red-500/10 px-5 py-2.5 text-sm font-semibold text-red-500 transition hover:bg-red-500/20"
+            className="rounded-lg border border-red-500/40 bg-red-500/10 px-5 py-2.5 text-sm font-semibold
+             text-red-500 transition hover:bg-red-500/20"
           >
             Logout
           </button>

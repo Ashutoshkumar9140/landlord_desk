@@ -29,7 +29,7 @@ function MainLayout({ darkMode, setDarkMode }) {
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
       <main
-        className={`flex-1 overflow-y-auto ${
+        className={`relative flex-1 overflow-y-auto ${
           darkMode ? "bg-slate-950" : "bg-slate-200"
         }`}
       >

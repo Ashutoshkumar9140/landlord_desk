@@ -3,16 +3,16 @@ import { Link } from "react-router-dom";
 function Contact() {
   return (
     <div
-      className="pointer-events-none fixed inset-x-0 bottom-0 top-16 z-40 flex items-start 
-    justify-center px-3 pb-4 pt-5 sm:px-4 sm:pb-6 sm:pt-8"
+      className="pointer-events-none absolute inset-0 z-40 flex items-start 
+    justify-center overflow-y-auto px-3 pb-4 pt-5 sm:px-4 sm:pb-6 sm:pt-8"
     >
       <div
-        className="relative pointer-events-auto h-5/6 w-full max-w-5xl overflow-hidden 
-      rounded-3xl border bg-slate-900 border-slate-700 shadow-2xl"
+        className="relative pointer-events-auto h-[90%] w-full max-w-5xl overflow-hidden 
+      rounded-3xl border bg-slate-900 border-slate-700 shadow-2xl sm:h-5/6"
       >
         <Link
           to="/"
-          className="absolute right-5 top-5 z-20 flex h-9 w-9 items-center justify-center 
+          className="absolute right-3 top-3 z-20 sm:right-5 sm:top-5 flex h-9 w-9 items-center justify-center 
           rounded-full border bg-slate-800 text-sm font-medium text-slate-300 transition
            hover:bg-red-500/10 hover:text-red-400 border-slate-600 hover:border-red-400"
         >
@@ -57,7 +57,7 @@ function Contact() {
                 <p className="mt-5 text-sm font-medium text-slate-500">Phone</p>
 
                 <p className="mt-1 font-semibold text-slate-100">
-                  +91 00000 00000
+                  +91 91403 XXXXX
                 </p>
               </div>
 

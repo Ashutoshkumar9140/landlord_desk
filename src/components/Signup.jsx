@@ -100,21 +100,26 @@ function Signup({ darkMode }) {
   };
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 top-[65px] z-40 flex items-start justify-center px-4 pb-8 pt-12">
+    <div
+      className="pointer-events-none absolute inset-0 z-40 flex items-start justify-center
+     overflow-y-auto px-4 pb-8 pt-8 sm:pt-12"
+    >
       <div
-        className={`relative max-h-[80vh] w-[80vw] max-w-md overflow-y-auto rounded-3xl border p-8 shadow-2xl pointer-events-auto hide-scrollbar ${
-          darkMode
-            ? "bg-slate-900 border-slate-700"
-            : "bg-slate-300 border-slate-400"
-        }`}
+        className={`relative max-h-full w-full max-w-md overflow-y-auto rounded-3xl border
+           p-6 sm:p-8 shadow-2xl pointer-events-auto hide-scrollbar ${
+             darkMode
+               ? "bg-slate-900 border-slate-700"
+               : "bg-slate-300 border-slate-400"
+           }`}
       >
         <Link
           to="/"
-          className={`absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full border text-sm font-medium transition ${
-            darkMode
-              ? "text-slate-300 hover:text-red-400 bg-slate-800 hover:bg-red-500/10 border-slate-600 hover:border-red-400"
-              : "hover:border-red-400 bg-slate-200 text-slate-700 border-slate-400 hover:bg-red-500/10 hover:text-red-600"
-          }`}
+          className={`absolute right-5 top-5 flex h-9 w-9 items-center justify-center 
+            rounded-full border text-sm font-medium transition ${
+              darkMode
+                ? "text-slate-300 hover:text-red-400 bg-slate-800 hover:bg-red-500/10 border-slate-600 hover:border-red-400"
+                : "hover:border-red-400 bg-slate-200 text-slate-700 border-slate-400 hover:bg-red-500/10 hover:text-red-600"
+            }`}
         >
           ✕
         </Link>

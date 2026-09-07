@@ -12,7 +12,7 @@ function Navbar({ darkMode, setDarkMode }) {
   };
 
   const navLinkClass = (path) =>
-    `px-3 py-2 rounded-lg text-sm transition font-medium ${
+    `px-2 sm:px-3 py-2 rounded-lg text-sm transition font-medium ${
       location.pathname === path
         ? "text-emerald-400 bg-emerald-500/15"
         : "hover:text-white text-slate-300"
@@ -30,7 +30,10 @@ function Navbar({ darkMode, setDarkMode }) {
           : "bg-slate-800 border-slate-700"
       }`}
     >
-      <div className="mx-auto flex flex-wrap max-w-7xl min-h-16 items-center justify-between px-4 gap-3 py-3 sm:px-6 sm:gap-6 sm:py-4 lg:px-8">
+      <div
+        className="mx-auto flex flex-col max-w-7xl min-h-16 items-center justify-between px-4
+       gap-3 py-3 sm:flex-row sm:px-6 sm:gap-6 sm:py-4 lg:px-8"
+      >
         <Link
           to="/"
           className="tracking-tight text-xl text-slate-100 font-extrabold transition hover:text-emerald-400"
@@ -40,7 +43,7 @@ function Navbar({ darkMode, setDarkMode }) {
 
         {/* ........................................... Main Navigation Links ........................................... */}
 
-        <div className="flex items-center flex-wrap justify-end sm:gap-6 gap-2 w-full sm:w-auto">
+        <div className="flex items-center flex-wrap justify-center gap-1 w-full sm:w-auto sm:gap-6">
           <Link to="/about" className={navLinkClass("/about")}>
             About Us
           </Link>
@@ -77,7 +80,8 @@ function Navbar({ darkMode, setDarkMode }) {
             type="button"
             onClick={() => setDarkMode((previous) => !previous)}
             aria-label="Toggle dark mode"
-            className="h-9 w-9 flex shrink-0 items-center justify-center rounded-lg bg-slate-700 border border-slate-600 text-base text-slate-100 transition hover:bg-slate-600"
+            className="h-9 w-9 flex shrink-0 items-center justify-center rounded-lg bg-slate-700 border
+             border-slate-600 text-base text-slate-100 transition hover:bg-slate-600"
           >
             {darkMode ? "☀" : "☾"}
           </button>

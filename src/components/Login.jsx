@@ -53,21 +53,26 @@ function Login({ darkMode }) {
   };
 
   return (
-    <div className="fixed inset-x-0 top-[65px] bottom-0 z-40 flex items-start justify-center pointer-events-none px-4 pt-12 pb-8">
+    <div
+      className="absolute inset-0 z-40 flex items-start justify-center 
+    overflow-y-auto pointer-events-none px-4 pt-8 pb-8 sm:pt-12"
+    >
       <div
-        className={`relative w-[80vw] max-w-md max-h-[80vh] overflow-y-auto rounded-3xl shadow-2xl border p-8 pointer-events-auto hide-scrollbar ${
-          darkMode
-            ? "bg-slate-900 border-slate-700"
-            : "bg-slate-300 border-slate-400"
-        }`}
+        className={`relative w-full max-w-md max-h-full overflow-y-auto rounded-3xl
+           shadow-2xl border p-6 sm:p-8 pointer-events-auto hide-scrollbar ${
+             darkMode
+               ? "bg-slate-900 border-slate-700"
+               : "bg-slate-300 border-slate-400"
+           }`}
       >
         <Link
           to="/"
-          className={`absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full border text-sm font-medium transition ${
-            darkMode
-              ? "bg-slate-800 text-slate-300 border-slate-600 hover:bg-red-500/10 hover:border-red-400 hover:text-red-400"
-              : "text-slate-700 border-slate-400 bg-slate-200 hover:text-red-600 hover:border-red-400 hover:bg-red-500/10"
-          }`}
+          className={`absolute right-5 top-5 flex h-9 w-9 items-center justify-center 
+            rounded-full border text-sm font-medium transition ${
+              darkMode
+                ? "bg-slate-800 text-slate-300 border-slate-600 hover:bg-red-500/10 hover:border-red-400 hover:text-red-400"
+                : "text-slate-700 border-slate-400 bg-slate-200 hover:text-red-600 hover:border-red-400 hover:bg-red-500/10"
+            }`}
         >
           ✕
         </Link>
