@@ -62,7 +62,6 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
       onClick={onClose}
     >
       <div className={panelClass} onClick={(event) => event.stopPropagation()}>
-        // ........................................Filter Header
         <div
           className={`flex items-center justify-between border-b px-6 py-4 ${darkMode ? "border-slate-700" : "border-slate-200"}`}
         >
@@ -87,7 +86,7 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
           </button>
         </div>
         <div className="h-[460px] flex">
-          // ........................................Filter Categories
+          {/* ........................................Filter Categories */}
           <div
             className={`w-56 shrink-0 overflow-y-auto border-r hide-scrollbar ${darkMode ? "border-slate-700" : "border-slate-200"}`}
           >
@@ -102,10 +101,13 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
               </button>
             ))}
           </div>
-          // ................................... Filter
-          Options........................................,,
+         
+
+
           <div className="overflow-y-auto p-7 flex-1 hide-scrollbar">
-            // ....................................... Payment Status
+
+            {/* ....................................... Payment Status */}
+
             {activeCategory === "paymentStatus" && (
               <div>
                 <h3
@@ -136,7 +138,7 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
                 </div>
               </div>
             )}
-            // .................................... Due Amount
+             {/* .................................... Due Amount */}
             {activeCategory === "dueAmount" && (
               <div>
                 <h3
@@ -183,7 +185,9 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
                 </p>
               </div>
             )}
-            // .................................... Billing Cycle
+
+             {/* .................................... Billing Cycle */}
+
             {activeCategory === "billingCycle" && (
               <div>
                 <h3
@@ -207,7 +211,9 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
                 </select>
               </div>
             )}
-            // ......................................Collection Date
+
+            {/* ......................................Collection Date */}
+
             {activeCategory === "collectionDate" && (
               <div>
                 <h3
@@ -230,7 +236,9 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
                 </p>
               </div>
             )}
-            // ....................................Upcoming Collection
+
+             {/* ....................................Upcoming Collection */}
+
             {activeCategory === "upcomingCollection" && (
               <div>
                 <h3
@@ -262,7 +270,9 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
             )}
           </div>
         </div>
-        // ........................................ Filter Actions
+
+         {/* ........................................ Filter Actions */}
+
         <div
           className={`flex justify-end gap-3 border-t px-6 py-4 ${darkMode ? "border-slate-700" : "border-slate-200"}`}
         >
