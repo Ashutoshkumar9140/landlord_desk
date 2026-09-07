@@ -12,6 +12,7 @@ function Login({ darkMode }) {
   const [error, setError] = useState("");
 
   // .......................... Check Login ...........................................
+
   useEffect(() => {
     if (user) {
       navigate("/dashboard", { replace: true });
@@ -19,6 +20,7 @@ function Login({ darkMode }) {
   }, [user, navigate]);
 
   // ...................... Handle Login ...........................................
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -35,6 +37,7 @@ function Login({ darkMode }) {
   };
 
   // ................................. Clear Error ..................................
+
   const handleInputFocus = () => {
     setError("");
   };
@@ -52,7 +55,7 @@ function Login({ darkMode }) {
   return (
     <div className="fixed inset-x-0 top-[65px] bottom-0 z-40 flex items-start justify-center pointer-events-none px-4 pt-12 pb-8">
       <div
-        className={`relative w-[80vw] max-w-md max-h-[80vh] overflow-y-auto rounded-3xl shadow-2xl border p-8 pointer-events-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
+        className={`relative w-[80vw] max-w-md max-h-[80vh] overflow-y-auto rounded-3xl shadow-2xl border p-8 pointer-events-auto hide-scrollbar ${
           darkMode
             ? "bg-slate-900 border-slate-700"
             : "bg-slate-300 border-slate-400"
@@ -71,6 +74,7 @@ function Login({ darkMode }) {
 
         <form onSubmit={handleSubmit}>
           {/* ........................................ Login Form Heading ............................... */}
+
           <div className="pr-12">
             <h1
               className={`text-3xl font-bold ${
@@ -90,6 +94,7 @@ function Login({ darkMode }) {
           </div>
 
           {/* ....................................... Error Message ..................................... */}
+
           {error && (
             <div
               className={`mt-6 rounded-lg border px-4 py-3 text-sm ${
@@ -103,6 +108,7 @@ function Login({ darkMode }) {
           )}
 
           {/* ........................................... Email or Mobile ...................................... */}
+
           <div className="mt-9">
             <label
               className={`mb-2 block text-sm font-semibold ${
@@ -128,6 +134,7 @@ function Login({ darkMode }) {
           </div>
 
           {/* ........................................... Password ....................................... */}
+
           <div className="mt-6">
             <label
               className={`mb-2 block text-sm font-semibold ${
@@ -166,7 +173,6 @@ function Login({ darkMode }) {
             </div>
           </div>
 
-          {/* ........................................... Login Button .................................. */}
           <button
             type="submit"
             className="mt-8 w-full rounded-lg bg-indigo-600 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/10 transition hover:bg-indigo-700"
@@ -175,6 +181,7 @@ function Login({ darkMode }) {
           </button>
 
           {/* ........................................... Signup Link ........................................... */}
+
           <div className="my-7 flex items-center gap-3">
             <div
               className={`h-px flex-1 ${

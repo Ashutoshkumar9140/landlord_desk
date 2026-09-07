@@ -5,7 +5,7 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
 
   const [draftFilters, setDraftFilters] = useState(filters);
 
-  // ...................................Filter Categories ........................................
+  // ...................................Filter Categories
   const categories = [
     { id: "paymentStatus", label: "Payment Status" },
     { id: "dueAmount", label: "Due Amount" },
@@ -14,23 +14,27 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
     { id: "upcomingCollection", label: "Upcoming Collection" },
   ];
 
-  // .....................................Update selected filter .....................................
+  // .....................................Update selected filter
+
   const updateFilter = (key, value) => {
     setDraftFilters((previous) => ({ ...previous, [key]: value }));
   };
 
-  // ................................................Apply Filters ................................................
+  // ................................................Apply Filters
+
   const handleApply = () => {
     onApply(draftFilters);
     onClose();
   };
 
-  // ............................................Main Filter Panel .............................................
+  // ............................................Main Filter Panel
+
   const panelClass = `w-full max-w-4xl overflow-hidden rounded-2xl border shadow-2xl ${
     darkMode ? "bg-slate-900 border-slate-700" : "bg-white border-slate-300"
   }`;
 
-  // ........................................Category Button Style......................................./
+  // ........................................Category Button Style
+
   const categoryClass = (category) =>
     `w-full px-5 py-4 text-left text-sm font-medium transition ${
       activeCategory === category
@@ -42,7 +46,8 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
           : "text-slate-600 hover:bg-slate-100"
     }`;
 
-// .............................................Input Style................................................
+  // .............................................Input Style
+
   const inputClass = `w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition focus:border-emerald-500 ${
     darkMode
       ? "text-slate-100 border-slate-600 bg-slate-800"
@@ -57,7 +62,7 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
       onClick={onClose}
     >
       <div className={panelClass} onClick={(event) => event.stopPropagation()}>
-// ........................................Filter Header........................................
+        // ........................................Filter Header
         <div
           className={`flex items-center justify-between border-b px-6 py-4 ${darkMode ? "border-slate-700" : "border-slate-200"}`}
         >
@@ -81,11 +86,10 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
             ×
           </button>
         </div>
-
         <div className="h-[460px] flex">
-// ........................................Filter Categories.......................................
+          // ........................................Filter Categories
           <div
-            className={`w-56 shrink-0 overflow-y-auto border-r ${darkMode ? "border-slate-700" : "border-slate-200"}`}
+            className={`w-56 shrink-0 overflow-y-auto border-r hide-scrollbar ${darkMode ? "border-slate-700" : "border-slate-200"}`}
           >
             {categories.map((category) => (
               <button
@@ -98,10 +102,10 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
               </button>
             ))}
           </div>
-
-  // ................................... Filter Options........................................
-          <div className="overflow-y-auto p-7 flex-1">
-  // ....................................... Payment Status .......................................
+          // ................................... Filter
+          Options........................................,,
+          <div className="overflow-y-auto p-7 flex-1 hide-scrollbar">
+            // ....................................... Payment Status
             {activeCategory === "paymentStatus" && (
               <div>
                 <h3
@@ -132,8 +136,7 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
                 </div>
               </div>
             )}
-
-    // .................................... Due Amount ...........................................
+            // .................................... Due Amount
             {activeCategory === "dueAmount" && (
               <div>
                 <h3
@@ -180,8 +183,7 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
                 </p>
               </div>
             )}
-
-// .................................... Billing Cycle ........................................
+            // .................................... Billing Cycle
             {activeCategory === "billingCycle" && (
               <div>
                 <h3
@@ -205,8 +207,7 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
                 </select>
               </div>
             )}
-
- // ......................................Collection Date......................................
+            // ......................................Collection Date
             {activeCategory === "collectionDate" && (
               <div>
                 <h3
@@ -229,8 +230,7 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
                 </p>
               </div>
             )}
-
-// ....................................Upcoming Collection ....................................
+            // ....................................Upcoming Collection
             {activeCategory === "upcomingCollection" && (
               <div>
                 <h3
@@ -262,8 +262,7 @@ function RoomFilters({ darkMode, filters, onApply, onClose }) {
             )}
           </div>
         </div>
-
-  // ........................................ Filter Actions ........................................
+        // ........................................ Filter Actions
         <div
           className={`flex justify-end gap-3 border-t px-6 py-4 ${darkMode ? "border-slate-700" : "border-slate-200"}`}
         >

@@ -6,11 +6,11 @@ function Navbar({ darkMode, setDarkMode }) {
   const { user, logout } = useAuth();
 
   // ........................................... Logout ...........................................
+
   const handleLogout = () => {
     logout();
   };
 
-  // ...................................... Navigation Link Style ........................................
   const navLinkClass = (path) =>
     `px-3 py-2 rounded-lg text-sm transition font-medium ${
       location.pathname === path
@@ -19,6 +19,7 @@ function Navbar({ darkMode, setDarkMode }) {
     }`;
 
   // .................................... Check Dashboard Page ...........................................
+
   const isDashboard = location.pathname === "/dashboard";
 
   return (
@@ -29,7 +30,7 @@ function Navbar({ darkMode, setDarkMode }) {
           : "bg-slate-800 border-slate-700"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl min-h-16 items-center justify-between px-6 gap-6 py-4 lg:px-8">
+      <div className="mx-auto flex flex-wrap max-w-7xl min-h-16 items-center justify-between px-4 gap-3 py-3 sm:px-6 sm:gap-6 sm:py-4 lg:px-8">
         <Link
           to="/"
           className="tracking-tight text-xl text-slate-100 font-extrabold transition hover:text-emerald-400"
@@ -38,7 +39,8 @@ function Navbar({ darkMode, setDarkMode }) {
         </Link>
 
         {/* ........................................... Main Navigation Links ........................................... */}
-        <div className="flex items-center sm:gap-6 gap-3">
+
+        <div className="flex items-center flex-wrap justify-end sm:gap-6 gap-2 w-full sm:w-auto">
           <Link to="/about" className={navLinkClass("/about")}>
             About Us
           </Link>
@@ -48,6 +50,7 @@ function Navbar({ darkMode, setDarkMode }) {
           </Link>
 
           {/* ........................................... Login, Signup and Logout ........................................... */}
+
           {isDashboard && user ? (
             <button
               type="button"
@@ -69,6 +72,7 @@ function Navbar({ darkMode, setDarkMode }) {
           )}
 
           {/* ........................................... Dark Mode Toggle ........................................... */}
+
           <button
             type="button"
             onClick={() => setDarkMode((previous) => !previous)}

@@ -34,12 +34,12 @@ function Settings({ onClose, darkMode, setDarkMode }) {
 
   return (
     <div
-      className="flex fixed inset-0 z-[100] items-center justify-center bg-black/60 px-6"
+      className="flex fixed inset-0 z-50 items-center justify-center bg-black/60 px-3 sm:px-6"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`w-full max-w-md rounded-2xl border p-8 shadow-2xl ${
+        className={`w-full max-w-md rounded-2xl border p-5 sm:p-8 shadow-2xl ${
           darkMode
             ? "text-slate-100 border-slate-700 bg-slate-900"
             : "bg-white text-slate-900 border-slate-300"

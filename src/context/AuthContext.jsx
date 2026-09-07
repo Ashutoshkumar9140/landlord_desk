@@ -53,6 +53,15 @@ export function AuthProvider({ children }) {
 
     localStorage.setItem(ACCOUNT_KEY, JSON.stringify(account));
 
+    const sessionUser = {
+      name: account.name,
+      email: account.email,
+      mobile: account.mobile,
+    };
+
+    localStorage.setItem(SESSION_KEY, JSON.stringify(sessionUser));
+    setUser(sessionUser);
+
     return {
       success: true,
       message: "Account created successfully.",

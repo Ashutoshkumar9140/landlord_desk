@@ -14,6 +14,7 @@ function Signup({ darkMode }) {
   const [error, setError] = useState("");
 
   // ........................................Handle Signup ........................................
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
@@ -22,13 +23,13 @@ function Signup({ darkMode }) {
     const trimmedEmail = email.trim();
     const trimmedMobile = mobile.trim();
 
-    // ........................................ Validate Name ........................................
+    // ........................................ Validate Name
     if (trimmedName.length < 2) {
       setError("Name must contain at least 2 characters.");
       return;
     }
 
-    // ........................................Validate Email ........................................
+    // ........................................Validate Email
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailPattern.test(trimmedEmail)) {
@@ -36,7 +37,7 @@ function Signup({ darkMode }) {
       return;
     }
 
-    // ......................................Validate Mobile Number ......................................
+    // ......................................Validate Mobile Number
     const mobilePattern = /^[6-9]\d{9}$/;
 
     if (!mobilePattern.test(trimmedMobile)) {
@@ -46,7 +47,7 @@ function Signup({ darkMode }) {
       return;
     }
 
-    // ....................................... Validate Password.......................................
+    // ....................................... Validate Password
     const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
     if (!passwordPattern.test(password)) {
@@ -56,7 +57,7 @@ function Signup({ darkMode }) {
       return;
     }
 
-    // ........................................Create New Account........................................
+    // ........................................Create New Account
     const result = signup({
       name: trimmedName,
       email: trimmedEmail,
@@ -69,7 +70,8 @@ function Signup({ darkMode }) {
       return;
     }
 
-    // ........................................Go To Dashboard........................................
+    // ........................................Go To Dashboard
+
     navigate("/dashboard", { replace: true });
   };
 
@@ -100,7 +102,7 @@ function Signup({ darkMode }) {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 top-[65px] z-40 flex items-start justify-center px-4 pb-8 pt-12">
       <div
-        className={`relative max-h-[80vh] w-[80vw] max-w-md overflow-y-auto rounded-3xl border p-8 shadow-2xl pointer-events-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
+        className={`relative max-h-[80vh] w-[80vw] max-w-md overflow-y-auto rounded-3xl border p-8 shadow-2xl pointer-events-auto hide-scrollbar ${
           darkMode
             ? "bg-slate-900 border-slate-700"
             : "bg-slate-300 border-slate-400"
@@ -271,7 +273,8 @@ function Signup({ darkMode }) {
 
           <button
             type="submit"
-            className="mt-8 w-full rounded-lg bg-indigo-600 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/10 transition hover:bg-indigo-700"
+            className="mt-8 w-full rounded-lg bg-indigo-600 py-3 text-sm font-semibold
+             text-white shadow-lg shadow-indigo-500/10 transition hover:bg-indigo-700"
           >
             Create Account
           </button>

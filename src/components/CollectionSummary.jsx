@@ -12,7 +12,7 @@ function CollectionSummary({
   const [showCollectionHistory, setShowCollectionHistory] = useState(false);
   const [showDueHistory, setShowDueHistory] = useState(false);
 
-  // Common styles for the summary cards............................
+  // Common styles for the summary cards,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
   const cardClass = `
     p-5 rounded-2xl shadow-md border transition
     ${darkMode ? "bg-slate-900 border-slate-700" : "bg-white border-slate-300"}
@@ -34,12 +34,13 @@ function CollectionSummary({
   return (
     <>
       {/* ...........................................Summary cards.............................. */}
-      <div className="gap-5 grid grid-cols-1 md:grid-cols-3">
+
+      <div className="gap-4 grid grid-cols-1 md:grid-cols-3">
         {/* Total Rooms */}
         <div className={cardClass}>
           <p className={labelClass}>Total Rooms</p>
 
-          <div className="items-center flex justify-between mt-2 gap-4">
+          <div className="items-center flex flex-wrap justify-between mt-2 gap-3">
             <p className={valueClass.replace("mt-2", "m-0")}>
               {Number(totalRooms) || 0}
             </p>
@@ -102,6 +103,7 @@ function CollectionSummary({
       </div>
 
       {/* ...........................................Collection History........................................... */}
+
       {showCollectionHistory && (
         <div
           className="
@@ -153,7 +155,7 @@ function CollectionSummary({
               </button>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 max-h-72 overflow-y-auto hide-scrollbar">
               {collectionHistory.length > 0 ? (
                 collectionHistory.map((item) => (
                   <div
@@ -195,6 +197,7 @@ function CollectionSummary({
       )}
 
       {/* ........................................... Due History........................................... */}
+
       {showDueHistory && (
         <div
           className="
@@ -246,7 +249,7 @@ function CollectionSummary({
               </button>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 max-h-72 overflow-y-auto hide-scrollbar">
               {dueHistory.length > 0 ? (
                 dueHistory.map((item) => (
                   <div

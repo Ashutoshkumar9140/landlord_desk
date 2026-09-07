@@ -4,32 +4,23 @@ import Footer from "../components/Footer";
 function Home({ darkMode }) {
   return (
     <div
-      className={`h-[calc(100vh-65px)] overflow-hidden transition-colors duration-300 ${
-        darkMode
-          ? "text-slate-100 bg-slate-950"
-          : "text-slate-900 bg-slate-200"
+      className={`min-h-screen overflow-y-auto transition-colors duration-300 ${
+        darkMode ? "text-slate-100 bg-slate-950" : "text-slate-900 bg-slate-200"
       }`}
     >
-
-      <main className="flex h-[calc(100vh-125px)] items-center justify-center px-6">
-
-        <div className="max-w-3xl text-center">
-
+      <main className="flex min-h-screen items-center justify-center px-4 py-8 sm:px-6">
+        <div className="w-full max-w-3xl text-center">
           <p
             className={`mb-4 text-sm font-semibold uppercase tracking-widest ${
-              darkMode
-                ? "text-indigo-400"
-                : "text-indigo-600"
+              darkMode ? "text-indigo-400" : "text-indigo-600"
             }`}
           >
             Simple Property Management
           </p>
 
           <h1
-            className={`text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl md:text-6xl ${
-              darkMode
-                ? "text-slate-100"
-                : "text-slate-900"
+            className={`text-3xl font-extrabold leading-tight tracking-tight sm:text-5xl md:text-6xl ${
+              darkMode ? "text-slate-100" : "text-slate-900"
             }`}
           >
             Manage your rental rooms
@@ -38,20 +29,15 @@ function Home({ darkMode }) {
           </h1>
 
           <p
-            className={`mx-auto mt-6 max-w-2xl text-lg leading-8 ${
-              darkMode
-                ? "text-slate-400"
-                : "text-slate-600"
+            className={`mx-auto mt-6 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8 ${
+              darkMode ? "text-slate-400" : "text-slate-600"
             }`}
           >
-            Landlord Desk helps landlords keep
-            track of rooms, tenants, rent, bills
-            and maintenance without depending
-            on notebooks.
+            Landlord Desk helps landlords keep track of rooms, tenants, rent,
+            bills and maintenance without depending on notebooks.
           </p>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
             <Link
               to="/signup"
               className="rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:bg-indigo-700"
@@ -69,15 +55,11 @@ function Home({ darkMode }) {
             >
               Learn More
             </Link>
-
           </div>
-
         </div>
-
       </main>
 
       <Footer />
-
     </div>
   );
 }

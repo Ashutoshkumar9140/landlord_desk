@@ -1,5 +1,5 @@
 function RoomSort({ darkMode, sortBy, onSortChange, onClose }) {
-// ........................................ Sort Options ....................................
+  // ........................................ Sort Options ....................................
   const options = [
     {
       value: "roomAsc",
@@ -21,21 +21,24 @@ function RoomSort({ darkMode, sortBy, onSortChange, onClose }) {
 
   return (
     <>
-{/* ....................................Sort Overlay ........................................ */}
+      {/* ....................................Sort Overlay*/}
+
       <div
         className="backdrop-blur-sm fixed inset-0 z-40 bg-slate-950/50"
         onClick={onClose}
       />
 
-{/* .................................Sort Panel ............................................ */}
+      {/* .................................Sort Panel*/}
+
       <div
-        className={`fixed right-6 top-24 z-50 w-full max-w-sm rounded-2xl border p-5 shadow-2xl ${
+        className={`fixed right-3 top-20 z-50 w-11/12 max-w-sm rounded-2xl border p-5 shadow-2xl sm:right-6 sm:top-24 ${
           darkMode
             ? "border-slate-700 bg-slate-900"
             : "bg-white border-slate-200"
         }`}
       >
-{/* ........................................ Sort Header ................................. */}
+        {/* ........................................ Sort Header */}
+
         <div className="mb-4 flex items-center justify-between">
           <div>
             <h3
@@ -68,7 +71,8 @@ function RoomSort({ darkMode, sortBy, onSortChange, onClose }) {
           </button>
         </div>
 
-{/* ..................................Sorting Choices ........................................ */}
+        {/* ..................................Sorting Choices ........................................ */}
+
         <div className="space-y-2">
           {options.map((option) => (
             <button
@@ -90,7 +94,8 @@ function RoomSort({ darkMode, sortBy, onSortChange, onClose }) {
             >
               <span>{option.label}</span>
 
-{/* ........................................Selected Option........................................ */}
+              {/* ........................................Selected Option........................................ */}
+
               {sortBy === option.value && (
                 <span className="text-emerald-500">✓</span>
               )}

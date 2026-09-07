@@ -22,14 +22,14 @@ import { useAuth } from "./context/AuthContext";
 function MainLayout({ darkMode, setDarkMode }) {
   return (
     <div
-      className={`h-screen overflow-hidden transition-colors duration-300 ${
+      className={`flex h-screen flex-col overflow-hidden transition-colors duration-300 ${
         darkMode ? "bg-slate-950" : "bg-slate-200"
       }`}
     >
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
       <main
-        className={`h-[calc(100vh-64px)] overflow-hidden ${
+        className={`flex-1 overflow-y-auto ${
           darkMode ? "bg-slate-950" : "bg-slate-200"
         }`}
       >

@@ -37,7 +37,7 @@ const getCurrentBillingRecord = (room) => {
   return currentRecord || null;
 };
 
-// ........................................... Get Today's Date ...........................................
+// .................................... Get Today,s Date
 const getTodayInputValue = () => {
   const today = new Date();
   const year = today.getFullYear();
@@ -45,6 +45,25 @@ const getTodayInputValue = () => {
   const day = String(today.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
+};
+
+const getOrdinal = (day) => {
+  if (day % 100 >= 11 && day % 100 <= 13) return "th";
+  return ["th", "st", "nd", "rd"][Math.min(day % 10, 3)];
+};
+
+const formatRentCycle = (value) => {
+  const numbers = String(value || "").match(/\d{1,2}/g) || [];
+  if (!numbers.length) return "";
+
+  const start = Math.min(Math.max(Number(numbers[0]), 1), 31);
+  const end = numbers[1]
+    ? Math.min(Math.max(Number(numbers[1]), 1), 31)
+    : start === 31
+      ? 1
+      : start - 1;
+
+  return `${start}${getOrdinal(start)} – ${end}${getOrdinal(end)} of next month`;
 };
 
 const getDateInputValue = (value) => {
@@ -139,6 +158,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
   }, [room]);
 
   // ........................................... Last Opened ...........................................
+
   useEffect(() => {
     if (!expanded) return;
 
@@ -161,6 +181,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
   }, [expanded]);
 
   // ........................................... Room Input ...........................................
+
   const handleRoomChange = (event) => {
     const { name, value } = event.target;
 
@@ -170,7 +191,50 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
     }));
   };
 
-  // ........................................... Billing Input ...........................................
+  // ........................................... Facilities
+  const addFacility = (event) => {
+    const value = event.target.value.trim();
+
+    if (event.key !== "Enter" || !value) return;
+    event.preventDefault();
+
+    setRoomData((previous) => {
+      if (
+        previous.facilities.some(
+          (facility) => facility.toLowerCase() === value.toLowerCase(),
+        )
+      ) {
+        return previous;
+      }
+
+      return {
+        ...previous,
+        facilities: [...previous.facilities, value],
+      };
+    });
+
+    event.target.value = "";
+  };
+
+  const removeFacility = (facilityToRemove) => {
+    setRoomData((previous) => ({
+      ...previous,
+      facilities: previous.facilities.filter(
+        (facility) => facility !== facilityToRemove,
+      ),
+    }));
+  };
+
+  const handleRentCycleBlur = () => {
+    const formattedCycle = formatRentCycle(roomData.rentCycle);
+
+    setRoomData((previous) => ({
+      ...previous,
+      rentCycle: formattedCycle,
+    }));
+  };
+
+  // .........................................Billing Input
   const handleBillingChange = (event) => {
     const { name, value } = event.target;
 
@@ -180,7 +244,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
     }));
   };
 
-  // ........................................... Tenant Input ...........................................
+  // .........................................Tenant Input
   const handleTenantChange = (tenantId, field, value) => {
     setRoomData((previous) => ({
       ...previous,
@@ -195,7 +259,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
     }));
   };
 
-  // ........................................... Add Tenant ...........................................
+  // ...................................... Add Tenant
   const addTenant = () => {
     setRoomData((previous) => ({
       ...previous,
@@ -211,7 +275,8 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
     }));
   };
 
-  // ........................................... Remove Tenant ...........................................
+  // .................................... Remove Tenant
+
   const removeTenant = (tenantId) => {
     setRoomData((previous) => ({
       ...previous,
@@ -219,7 +284,8 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
     }));
   };
 
-  // ........................................... Identity Picker ...........................................
+  // ........................................... Identity Picker
+
   const handleIdentityClick = (tenantId) => {
     const input = fileInputRefs.current[tenantId];
 
@@ -259,6 +325,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
   };
 
   // ........................................... Save Room Details ...........................................
+
   const saveRoomDetails = () => {
     const updatedRoom = {
       ...room,
@@ -275,10 +342,9 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
     setRoomEditing(false);
   };
 
-  // ........................................... Save Billing and History ...........................................
+  // ........................................... Save Billing and History...........................................
+
   const saveBillingDetails = () => {
-    // The running month is always derived from the real current date.
-    // The landlord does not manually type the month.
     const currentMonth = getCurrentMonthLabel();
 
     const newHistoryRecord = {
@@ -300,12 +366,12 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
       },
     };
 
-    // ........................................... Get Existing History ...........................................
+    // ........................................... Get Existing History
     const existingHistory = Array.isArray(room.billingHistory)
       ? room.billingHistory
       : [];
 
-    // ........................................... Check Current Month ...........................................
+    // ........................................... Check Current Month
     const existingIndex = existingHistory.findIndex(
       (item) => item.month.toLowerCase() === currentMonth.toLowerCase(),
     );
@@ -322,15 +388,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
     }
 
     // ........................................... Sort Billing History ...........................................
-    /*
-      Keep history ordered from
-      newest month to oldest month.
-      This handles:
-      January
-      February
-      March
-      etc.
-    */
+
     const sortedHistory = [...updatedHistory].sort(
       (a, b) => new Date(`1 ${a.month}`) - new Date(`1 ${b.month}`),
     );
@@ -349,33 +407,30 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
       lastOpened,
     };
 
-    // ........................................... Update Dashboard ...........................................
-    /*
-      Update Dashboard state.
-      Dashboard automatically saves
-      this to localStorage.
-    */
+    // ......... Update Dashboard ,Update Dashboard state,Dashboard automatically saves this to localStorage.....................
+
     onUpdate(updatedRoom);
     setBillingEditing(false);
   };
 
-  // ........................................... Delete Room ...........................................
+  //  Delete Room ......................................
   const confirmDelete = () => {
     onDelete(room.id);
     setShowDeleteWarning(false);
   };
 
-  // ........................................... Get Billing History ...........................................
+  //  Get Billing History .......................
   const billingHistory = Array.isArray(room.billingHistory)
     ? room.billingHistory
     : [];
 
-  // ........................................... Latest 5 Months ...........................................
+  //  Latest 5 Months .................
   const latestHistory = [...billingHistory]
     .sort((a, b) => new Date(`1 ${b.month}`) - new Date(`1 ${a.month}`))
     .slice(0, 5);
 
   // ........................................... Render History ...........................................
+
   const renderHistory = () => {
     if (!history) {
       return null;
@@ -399,6 +454,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
         </div>
 
         {/* ........................................... Rent History ........................................... */}
+
         {history === "rent" && (
           <div className="overflow-x-auto">
             <div className="min-w-[650px]">
@@ -448,6 +504,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
         )}
 
         {/* ........................................... Electricity History ........................................... */}
+
         {history === "electricity" && (
           <div className="overflow-x-auto">
             <div className="min-w-[700px]">
@@ -494,6 +551,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
         )}
 
         {/* ........................................... Water History ........................................... */}
+
         {history === "water" && (
           <div className="overflow-x-auto">
             <div className="min-w-[700px]">
@@ -539,7 +597,8 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
     );
   };
 
-  // ........................................... Collapsed Room Card ...........................................
+  // ........................................... Collapsed Room Car...........................................
+
   const currentDisplayRecord = getCurrentBillingRecord(room);
 
   if (!expanded) {
@@ -572,7 +631,8 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
           </span>
         </div>
 
-        {/* ........................................... Tenants ........................................... */}
+        {/* ........................................... Tenants details ........................................... */}
+
         <div className="mt-5">
           {room.tenants && room.tenants.length > 0 ? (
             <div className="space-y-1">
@@ -592,13 +652,14 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
           )}
         </div>
 
-        {/* ........................................... Important Information ........................................... */}
+        {/* ........................................... Important Information  of rooms........................................... */}
+
         <div className="grid-cols-2 mt-5 gap-x-5 pt-4 border-slate-100 gap-y-4 border-t grid">
           <div>
             <p className="text-xs text-slate-400">RENT CYCLE</p>
 
             <p className="mt-1 font-semibold text-slate-700 text-sm">
-              {room.rentCycle || "Not set"}
+              {formatRentCycle(room.rentCycle) || "Not set"}
             </p>
           </div>
 
@@ -646,18 +707,20 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
     );
   }
 
-  // .................. Expanded Room ...........................................
   return (
     <>
-{/* ................................. Overlay ........................................... */}
+      {/* ................................. Overlay ........................................... */}
       <div
         className="inset-0 backdrop-blur-sm bg-slate-950/60 z-40 fixed"
         onClick={onToggle}
       />
 
-{/* ................................Expanded Room Window........................................... */}
-      <div className="bg-slate-100 flex -translate-y-1/2 border left-1/2 w-[80vw] rounded-3xl h-[80vh] shadow-2xl top-1/2 -translate-x-1/2 overflow-hidden border-slate-200 z-50 fixed flex-col">
-   {/* ........................................... Header ........................................... */}
+      {/* ................................Expanded Room Window........................................... */}
+
+      <div
+        className="bg-slate-100 flex -translate-y-1/2 border left-1/2 w-[80vw] rounded-3xl h-[80vh] 
+      shadow-2xl top-1/2 -translate-x-1/2 overflow-hidden border-slate-200 z-50 fixed flex-col"
+      >
         <div className="bg-white border-slate-200 justify-between px-7 flex shrink-0 items-center py-5 border-b">
           <div>
             <div className="items-center gap-3 flex">
@@ -691,11 +754,11 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
           </button>
         </div>
 
-{/* ................. Room Content ........................................... */}
+        {/* ................. Room Content ........................................................... */}
 
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-6 hide-scrollbar">
           <div className="gap-7 grid grid-cols-1 lg:grid-cols-2">
-{/* ........................................... Room and Tenant Details ........................... */}
+            {/* ........................................... Room and Tenant Details ........................... */}
 
             <section className="border border-violet-200 p-6 shadow-sm bg-violet-50 rounded-3xl">
               <div className="gap-4 justify-between items-start flex">
@@ -723,7 +786,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
                 </button>
               </div>
 
-{/* ................................. Tenants ....................................... */}
+              {/* ................................. Tenants ....................................... */}
               <div className="mt-7">
                 <p className="mb-3 text-sm font-bold text-slate-600">Tenants</p>
 
@@ -841,7 +904,8 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
                 </div>
               </div>
 
-  {/* ........................................... Room Information.................................. */}
+              {/* ........................................... Room Information.................................. */}
+
               <div className="gap-3 grid-cols-2 grid mt-6">
                 {/* Living */}
                 <div className="border border-violet-100 p-4 rounded-2xl bg-white">
@@ -895,12 +959,13 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
                       name="rentCycle"
                       value={roomData.rentCycle}
                       onChange={handleRoomChange}
-                      placeholder="15 → 14"
+                      onBlur={handleRentCycleBlur}
+                      placeholder="15"
                       className="px-2 text-slate-800 border text-sm border-slate-200 bg-white rounded-lg py-2 w-full mt-2"
                     />
                   ) : (
                     <p className="text-sm font-semibold mt-2 text-slate-700">
-                      {roomData.rentCycle || "Not set"}
+                      {formatRentCycle(roomData.rentCycle) || "Not set"}
                     </p>
                   )}
                 </div>
@@ -925,20 +990,45 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
                 </div>
               </div>
 
-{/* ...........................................Facilities........................................... */}
-              <div className="mt-6 border rounded-2xl bg-white p-4 border-violet-100">
-                <p className="text-slate-400 mb-3 text-xs font-bold">
-                  FACILITIES
-                </p>
+              {/* ...........................................Facilities........................................... */}
 
-                <div className="flex gap-2 flex-wrap">
+              <div className="mt-6 border rounded-2xl bg-white p-4 border-violet-100">
+                <div className="items-center justify-between gap-3 flex">
+                  <p className="text-slate-400 text-xs font-bold">FACILITIES</p>
+                  {roomEditing && (
+                    <span className="text-violet-400 text-xs font-medium">
+                      Press Enter to add
+                    </span>
+                  )}
+                </div>
+
+                {roomEditing && (
+                  <input
+                    type="text"
+                    onKeyDown={addFacility}
+                    placeholder="Add facility (e.g. AC, Parking)"
+                    className="px-3 text-slate-800 border text-sm border-slate-200 bg-white rounded-lg py-2 w-full mt-3 outline-none focus:border-violet-400"
+                  />
+                )}
+
+                <div className="flex gap-2 flex-wrap mt-3">
                   {roomData.facilities.length > 0 ? (
                     roomData.facilities.map((facility) => (
                       <span
                         key={facility}
-                        className="font-semibold bg-violet-100 rounded-full px-3 py-1.5 text-xs text-violet-700"
+                        className="font-semibold bg-violet-100 rounded-full px-3 py-1.5 text-xs text-violet-700 flex items-center gap-2"
                       >
                         {facility}
+                        {roomEditing && (
+                          <button
+                            type="button"
+                            onClick={() => removeFacility(facility)}
+                            className="text-violet-500 hover:text-red-500 font-bold"
+                            aria-label={`Remove ${facility}`}
+                          >
+                            ×
+                          </button>
+                        )}
                       </span>
                     ))
                   ) : (
@@ -950,7 +1040,8 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
               </div>
             </section>
 
-{/* ....................................... Billing Details ........................................... */}
+            {/* ....................................... Billing Details ........................................... */}
+
             <section className="p-6 border-emerald-200 shadow-sm bg-emerald-50 rounded-3xl border">
               <div className="gap-4 flex justify-between items-start">
                 <div>
@@ -979,7 +1070,8 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
                 </button>
               </div>
 
-{/* ....................................... Running Month ........................................... */}
+              {/* ....................................... Running Month ........................................... */}
+
               <div className="border-emerald-100 rounded-2xl bg-white p-4 mt-7 border">
                 <p className="font-bold text-slate-400 text-xs">
                   RUNNING MONTH
@@ -990,7 +1082,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
                 </p>
               </div>
 
-{/* ..................................... Total Rent ........................................... */}
+              {/* ..................................... Total Rent ........................................... */}
               <div className="p-5 border-emerald-100 border rounded-2xl mt-4 bg-white">
                 <div className="flex justify-between items-center">
                   <p className="font-bold text-slate-800">💰 Total Rent</p>
@@ -1083,7 +1175,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
                 </div>
               </div>
 
-{/* ........................................Electricity.................................................. */}
+              {/* ........................................Electricity.................................................. */}
               <div className="p-5 bg-white rounded-2xl border border-emerald-100 mt-4">
                 <div className="items-center flex justify-between">
                   <p className="text-slate-800 font-bold">⚡ Electricity</p>
@@ -1157,7 +1249,8 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
                 </p>
               </div>
 
-{/* ...........................................Water...................................... */}
+              {/* ...........................................Water...................................... */}
+
               <div className="p-5 mt-4 border bg-white rounded-2xl border-emerald-100">
                 <div className="justify-between flex items-center">
                   <p className="font-bold text-slate-800">💧 Water</p>
@@ -1229,7 +1322,8 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
                 </p>
               </div>
 
-{/* ...........................................Total Monthly Bill....................................... */}
+              {/* ...........................................Total Monthly Bill....................................... */}
+
               <div className="border rounded-2xl p-5 border-emerald-200 bg-emerald-100 mt-4">
                 <p className="tracking-wide font-bold uppercase text-emerald-700 text-xs">
                   Total Monthly Bill
@@ -1266,7 +1360,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
                 </div>
               </div>
 
-{/* .................................... History Buttons ........................................... */}
+              {/* .................................... History Buttons ........................................... */}
               <div className="grid-cols-3 gap-2 grid mt-5">
                 <button
                   onClick={() => setHistory(history === "rent" ? null : "rent")}
@@ -1306,13 +1400,12 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
                 </button>
               </div>
 
-{/* .................................... History ........................................... */}
               {renderHistory()}
             </section>
           </div>
         </div>
 
-{/* ........................................... Delete Room ........................................... */}
+        {/* ........................................... Delete Room ........................................... */}
         <div className="border-t flex shrink-0 bg-white border-slate-200 items-center px-7 py-4">
           <button
             onClick={() => setShowDeleteWarning(true)}
@@ -1323,7 +1416,7 @@ function RoomCard({ room, expanded, onToggle, onUpdate, onDelete }) {
         </div>
       </div>
 
-{/* ..................................... Delete Warning ........................................... */}
+      {/* ..................................... Delete Warning ........................................... */}
       {showDeleteWarning && (
         <div className="z-[70] fixed px-4 inset-0 items-center flex bg-black/60 justify-center">
           <div className="w-full bg-white rounded-3xl max-w-md shadow-2xl p-7">

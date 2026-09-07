@@ -71,8 +71,8 @@ const defaultRooms = [
         month: "August 2026",
         rent: {
           paidDate: "15 Aug 2026",
-          paidAmount: 8000,
-          dueAmount: 0,
+          paidAmount: 7000,
+          dueAmount: 1000,
         },
         electricity: {
           reading: 1250,
@@ -89,8 +89,8 @@ const defaultRooms = [
         month: "July 2026",
         rent: {
           paidDate: "15 Jul 2026",
-          paidAmount: 8000,
-          dueAmount: 0,
+          paidAmount: 7800,
+          dueAmount: 400,
         },
         electricity: {
           reading: 1070,
@@ -107,8 +107,8 @@ const defaultRooms = [
         month: "June 2026",
         rent: {
           paidDate: "15 Jun 2026",
-          paidAmount: 8000,
-          dueAmount: 0,
+          paidAmount: 7900,
+          dueAmount: 600,
         },
         electricity: {
           reading: 860,
@@ -125,8 +125,8 @@ const defaultRooms = [
         month: "May 2026",
         rent: {
           paidDate: "15 May 2026",
-          paidAmount: 8000,
-          dueAmount: 0,
+          paidAmount: 7850,
+          dueAmount: 350,
         },
         electricity: {
           reading: 670,
@@ -137,6 +137,24 @@ const defaultRooms = [
           reading: 277,
           units: 85,
           bill: 255,
+        },
+      },
+      {
+        month: "April 2026",
+        rent: {
+          paidDate: "15 Apr 2026",
+          paidAmount: 7300,
+          dueAmount: 900,
+        },
+        electricity: {
+          reading: 500,
+          units: 165,
+          bill: 465,
+        },
+        water: {
+          reading: 195,
+          units: 82,
+          bill: 246,
         },
       },
     ],
@@ -195,8 +213,8 @@ const defaultRooms = [
         month: "August 2026",
         rent: {
           paidDate: "05 Aug 2026",
-          paidAmount: 7500,
-          dueAmount: 0,
+          paidAmount: 6750,
+          dueAmount: 750,
         },
         electricity: {
           reading: 1200,
@@ -213,8 +231,8 @@ const defaultRooms = [
         month: "July 2026",
         rent: {
           paidDate: "05 Jul 2026",
-          paidAmount: 7500,
-          dueAmount: 0,
+          paidAmount: 6600,
+          dueAmount: 300,
         },
         electricity: {
           reading: 1030,
@@ -231,8 +249,8 @@ const defaultRooms = [
         month: "June 2026",
         rent: {
           paidDate: "05 Jun 2026",
-          paidAmount: 7500,
-          dueAmount: 0,
+          paidAmount: 6600,
+          dueAmount: 400,
         },
         electricity: {
           reading: 870,
@@ -249,8 +267,8 @@ const defaultRooms = [
         month: "May 2026",
         rent: {
           paidDate: "05 May 2026",
-          paidAmount: 7500,
-          dueAmount: 0,
+          paidAmount: 6800,
+          dueAmount: 500,
         },
         electricity: {
           reading: 715,
@@ -261,6 +279,24 @@ const defaultRooms = [
           reading: 287,
           units: 75,
           bill: 225,
+        },
+      },
+      {
+        month: "April 2026",
+        rent: {
+          paidDate: "05 Apr 2026",
+          paidAmount: 6600,
+          dueAmount: 700,
+        },
+        electricity: {
+          reading: 565,
+          units: 145,
+          bill: 405,
+        },
+        water: {
+          reading: 212,
+          units: 72,
+          bill: 216,
         },
       },
     ],
@@ -519,8 +555,6 @@ function Dashboard({ darkMode, setDarkMode }) {
       };
     }
 
-    // No billing record means there is no payment for this month.
-
     return {
       rent: Number(room.rent) || 0,
       paid: 0,
@@ -529,6 +563,36 @@ function Dashboard({ darkMode, setDarkMode }) {
       nextPaymentDate: "",
     };
   };
+
+  // .....................................COLLECTION HISTORY........................................
+
+  const collectionHistory = useMemo(() => {
+    return MONTH_OPTIONS.map((month) => {
+      const amount = rooms.reduce((sum, room) => {
+        const payment = getMonthPayment(room, month.value);
+        return sum + (Number(payment.paid) || 0);
+      }, 0);
+
+      return {
+        month: month.label,
+        amount,
+      };
+    });
+  }, [rooms]);
+
+  const dueHistory = useMemo(() => {
+    return MONTH_OPTIONS.map((month) => {
+      const amount = rooms.reduce((sum, room) => {
+        const payment = getMonthPayment(room, month.value);
+        return sum + (Number(payment.due) || 0);
+      }, 0);
+
+      return {
+        month: month.label,
+        amount,
+      };
+    });
+  }, [rooms]);
 
   // .....................................COLLECTION........................................
 
@@ -540,22 +604,13 @@ function Dashboard({ darkMode, setDarkMode }) {
     }, 0);
   }, [rooms, selectedMonth]);
 
-  // Total due counts only the remaining amount after a partial payment.
-
   const totalDue = useMemo(() => {
     return rooms.reduce((sum, room) => {
       const payment = getMonthPayment(room, selectedMonth);
 
-      const paid = Number(payment.paid) || 0;
-
       const due = Number(payment.due) || 0;
 
-      // Count only remaining due from partial payments.
-      if (paid > 0 && due > 0) {
-        return sum + due;
-      }
-
-      return sum;
+      return sum + due;
     }, 0);
   }, [rooms, selectedMonth]);
 
@@ -646,7 +701,7 @@ function Dashboard({ darkMode, setDarkMode }) {
   };
 
   const matchesUpcomingCollection = (room) => {
-    // Ignore this filter when no days are selected.
+    // Ignore this filter when no days are selected................
 
     if (!filters.upcomingDays) {
       return true;
@@ -678,7 +733,7 @@ function Dashboard({ darkMode, setDarkMode }) {
 
     endDate.setDate(endDate.getDate() + days);
 
-    // Use the selected month for the collection date.
+    // Use the selected month for the collection date................
 
     const [selectedYear, selectedMonthNumber] = selectedMonth
       .split("-")
@@ -690,7 +745,7 @@ function Dashboard({ darkMode, setDarkMode }) {
       billingDay,
     );
 
-    // Move to next month if this month's billing date has passed.
+    // Move to next month if this month's billing date has passed...................
 
     const currentMonthValue = getMonthValue(today);
 
@@ -701,13 +756,12 @@ function Dashboard({ darkMode, setDarkMode }) {
     return collectionDate >= startDate && collectionDate <= endDate;
   };
 
-  // .....................................FILTER + SEARCH + SORT........................................
+  // .....................................FILTER , SEARCH ,SORT.......................................................
 
   const filteredAndSortedRooms = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
     let result = rooms.filter((room) => {
-
       const matchesSearch = String(room.number || "")
         .toLowerCase()
         .includes(query);
@@ -809,7 +863,6 @@ function Dashboard({ darkMode, setDarkMode }) {
         darkMode ? "text-white bg-slate-950" : "text-slate-900 bg-slate-100"
       }`}
     >
-
       <header
         className={`border-b shadow-sm ${
           darkMode
@@ -817,10 +870,10 @@ function Dashboard({ darkMode, setDarkMode }) {
             : "bg-white border-slate-200"
         }`}
       >
-        <div className="max-w-7xl px-6 h-16 mx-auto lg:px-8 flex items-center justify-between">
+        <div className="max-w-7xl px-4 h-16 mx-auto sm:px-6 lg:px-8 flex items-center justify-between">
           <div>
             <h1
-              className={`font-extrabold tracking-tight text-2xl ${
+              className={`font-extrabold tracking-tight text-xl sm:text-2xl ${
                 darkMode ? "text-white" : "text-slate-800"
               }`}
             >
@@ -874,9 +927,8 @@ function Dashboard({ darkMode, setDarkMode }) {
         </div>
       </header>
 
-      <main className="py-8 px-6 mx-auto lg:px-8 max-w-7xl">
+      <main className="py-6 px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <section>
-
           <div className="flex-col sm:justify-between sm:items-center sm:flex-row gap-2 mb-5 flex">
             <div>
               <p
@@ -919,6 +971,8 @@ function Dashboard({ darkMode, setDarkMode }) {
             thisMonthCollection={thisMonthCollection}
             totalDue={totalDue}
             onAddRoom={handleAddRoom}
+            collectionHistory={collectionHistory}
+            dueHistory={dueHistory}
           />
 
           <div className="mt-8 mb-5">
@@ -948,7 +1002,6 @@ function Dashboard({ darkMode, setDarkMode }) {
               }`}
             >
               <div className="flex lg:flex-row gap-3 lg:items-center flex-col">
-
                 <div className="relative flex-1">
                   <input
                     id="room-search"
@@ -1090,7 +1143,7 @@ function Dashboard({ darkMode, setDarkMode }) {
 
           {rooms.length === 0 && (
             <div
-              className={`border-2 border-dashed p-16 rounded-3xl text-center ${
+              className={`border-2 border-dashed p-8 sm:p-16 rounded-3xl text-center ${
                 darkMode
                   ? "border-slate-700 bg-slate-900"
                   : "border-slate-300 bg-white"
@@ -1112,7 +1165,7 @@ function Dashboard({ darkMode, setDarkMode }) {
 
           {rooms.length > 0 && filteredAndSortedRooms.length === 0 && (
             <div
-              className={`border-dashed text-center border-2 rounded-3xl p-12 ${
+              className={`border-dashed text-center border-2 rounded-3xl p-8 sm:p-12 ${
                 darkMode
                   ? "bg-slate-900 border-slate-700"
                   : "border-slate-300 bg-white"

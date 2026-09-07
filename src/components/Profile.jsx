@@ -26,14 +26,10 @@ function Profile({
   const [editing, setEditing] = useState(false);
 
   // .........................................Load Profile Data ...........................................
-  useEffect(() => {
-    /*
-      Clear old profile data once.
 
-      Earlier versions of the project stored dummy profile
-      information in localStorage. This removes that old data
-      without requiring the user to manually clear the browser.
-    */
+  useEffect(() => {
+    // Clear old profile data once.........
+
     const profileVersion = localStorage.getItem(PROFILE_VERSION_KEY);
 
     if (!profileVersion) {
@@ -57,6 +53,7 @@ function Profile({
   }, [user, profileImage]);
 
   // ........................ Handle Profile Changes...........................................
+
   const handleChange = (field, value) => {
     setProfile((previous) => ({
       ...previous,
@@ -65,6 +62,7 @@ function Profile({
   };
 
   // .............................. Handle Profile Image...........................................
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
@@ -89,6 +87,7 @@ function Profile({
   };
 
   // ..................................Save Profile.................................
+
   const handleSave = () => {
     const profileData = {
       name: user?.name || "",
@@ -107,6 +106,7 @@ function Profile({
   };
 
   // ...........................................Logout..............................
+
   const handleLogout = () => {
     onLogout();
   };
@@ -115,13 +115,14 @@ function Profile({
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 px-4 py-8">
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border p-6 shadow-2xl sm:p-8 ${
+        className={`relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl border p-6 shadow-2xl sm:p-8 hide-scrollbar ${
           darkMode
             ? "bg-slate-900 border-slate-700"
             : "bg-white border-slate-300"
         }`}
       >
         {/* ...........................................Profile Header................................ */}
+
         <button
           type="button"
           onClick={onClose}
@@ -161,6 +162,7 @@ function Profile({
         </div>
 
         {/* ...........................................Profile Photo................................ */}
+
         <div className="mt-8 flex flex-col items-center">
           <div
             className={`flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 ${
@@ -206,6 +208,7 @@ function Profile({
         </div>
 
         {/* ........................................... Profile Information................................ */}
+
         <div className="mt-8 grid gap-5 sm:grid-cols-2">
           <div>
             <label
@@ -320,6 +323,7 @@ function Profile({
         </div>
 
         {/* ...........................................Profile Actions................................... */}
+
         <div className="mt-8 flex flex-wrap gap-3">
           {!editing ? (
             <button
